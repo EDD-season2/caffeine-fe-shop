@@ -6,15 +6,11 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
-
-export interface ShopListItemProp {
-    id: number
-    name: string
-}
+import Shop from '../model/Shop'
 
 @Component
 export default class ShopListItem extends Vue {
-    @Prop() private itemProp!: ShopListItemProp
+    @Prop() private itemProp!: Shop
 
     constructor () {
         super()

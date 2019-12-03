@@ -1,34 +1,37 @@
 <template>
-  <div>
-    <router-link to="/register">매장 등록</router-link>
-    <ShopList :itemProps="shops"/>
-  </div>
+    <div>
+        <router-link to="/register">매장 등록</router-link>
+        <ShopList :itemProps="shops"/>
+    </div>
 </template>
 
 <script lang="ts">
 // @ is an alias to /src
 import Vue from 'vue'
-import HelloWorld from '@/components/HelloWorld.vue'
+import Component from 'vue-class-component'
+
 import ShopList from '@/components/ShopList.vue'
 import ShopListItemProp from '@/components/ShopListItem.vue'
-import Component from 'vue-class-component'
+
+import ShopApi from '@/lib/ShopApi'
+import Shop from '../model/Shop'
 
 @Component({
     components: {
-        HelloWorld,
         ShopList
     }
 })
 export default class Home extends Vue {
-    private shops?: ShopListItemProp[]
+    private shops: Shop[] = [];
 
     constructor () {
       super()
-
-      this.shops = [
-        { id: 1, name: '스타벅스 잠실점' },
-        { id: 2, name: '스타벅스 송파구청점' }
-      ]
+        const { shops } = this
+        ShopApi.findAllShops()
+        .then(_shops => {
+            this.shops.splice(0, this.shops.length)
+            _shops.map(res => new Shop(res.id, res.name)).forEach(v => this.shops.push(v))
+        })
     }
 }
 </script>

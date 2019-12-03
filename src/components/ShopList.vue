@@ -10,7 +10,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import ShopListItem, { ShopListItemProp } from './ShopListItem.vue'
+import ShopListItem from './ShopListItem.vue'
 
 import Shop from '../model/Shop'
 import { Prop } from 'vue-property-decorator'
@@ -21,7 +21,7 @@ import { Prop } from 'vue-property-decorator'
     }
 })
 export default class ShopList extends Vue {
-    @Prop() private itemProps!: ShopListItemProp[]
+    @Prop() private itemProps!: Shop[]
 }
 </script>
 

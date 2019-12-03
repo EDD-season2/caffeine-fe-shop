@@ -1,10 +1,9 @@
 export default class Shop {
-
-    constructor(
+    constructor (
+        private _id: number,
         private _name: string
     ) {}
 
-    get name() {
-        return name
-    };
+    get id () { return this._id }
+    get name () { return this._name };
 }
