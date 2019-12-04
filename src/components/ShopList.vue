@@ -1,9 +1,9 @@
 <template>
-<ul class="shop-list">
+<v-card elevation="1" class="mx-3">
     <template v-for="(item) in itemProps">
         <ShopListItem :itemProp="item" v-bind:key="item.id"/>
     </template>
-</ul>
+</v-card>
 </template>
 
 <script lang="ts">
@@ -27,6 +27,8 @@ export default class ShopList extends Vue {
 
 <style lang="scss" scoped>
 .shop-list {
+    // background: #ff7f50d6;
     list-style: none;
+    // padding-left: 0;
 }
 </style>
