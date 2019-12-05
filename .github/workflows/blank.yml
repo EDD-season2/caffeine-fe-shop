@@ -6,13 +6,11 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
     - name: github-build
-      run: docker build . Dockerfile --tag kangmin46/frontend-shop:latest
+      run: docker build . --file Dockerfile --tag kangmin46/frontend-shop:latest
     - name: docker image push
       run: |
         docker login -u ${{secrets.DOCKER_USER_NAME}} --password ${{secrets.DOCKER_USER_PASSWORD}}
