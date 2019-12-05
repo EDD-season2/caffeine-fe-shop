@@ -7,8 +7,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
+    steps:  
     - uses: actions/checkout@v1
+    - name: npm install
+      run: |
+       npm install
+       npm run build
+       ls -al
     - name: github-build
       run: docker build . --file Dockerfile --tag kangmin46/frontend-shop:latest
     - name: docker image push
