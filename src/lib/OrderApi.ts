@@ -3,7 +3,6 @@ import OrderResponse from './OrderResponse'
 
 export interface OrderApi {
     findById(id: number): Promise<OrderResponse>
-    findByShopId(shopId: number): Promise<OrderResponse[]>
     findPendingOrders(): Promise<OrderResponse[]>
     findInProgressOrders(): Promise<OrderResponse[]>
     findFinishedOrders(): Promise<OrderResponse[]>

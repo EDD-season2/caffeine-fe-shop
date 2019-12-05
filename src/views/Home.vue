@@ -15,12 +15,24 @@
             <PendingOrderList :orders="pendingOrders" />
         </v-tab-item>
         <v-tab-item>
-            <OrderList :orders="orders" class="mx-3"/>
+            <OrderList :orders="inProgressOrders" class="mx-3"/>
         </v-tab-item>
         <v-tab-item>
-            처리된
+            <OrderList :orders="finishedOrders" class="mx-3"/>
         </v-tab-item>
     </v-tabs>
+        <v-snackbar
+            class="mx-3 mb-2"
+            v-model="showSnackbar">
+        {{ snackbarText }}
+        <v-btn
+          color="pink"
+          text
+          @click="showSnackbar = false"
+        >
+          Close
+        </v-btn>
+    </v-snackbar>
 </div>
 </template>
 
@@ -40,6 +52,8 @@ import Order from '../model/Order'
 import { OrderApiFactory } from '../lib/OrderApi'
 import OrderItem from '../model/OrderItem'
 import ShopResponse from '../lib/ShopResponse'
+import OrderItemResponse from '../lib/OrderItemResponse'
+import OrderResponse from '../lib/OrderResponse'
 
 @Component({
     components: {
@@ -51,29 +65,47 @@ import ShopResponse from '../lib/ShopResponse'
 })
 export default class Home extends Vue {
     private shop: ShopResponse = new ShopResponse(0, '');
-    private orders: Order[] = [];
     private pendingOrders: Order[] = [];
+    private inProgressOrders: Order[] = [];
+    private finishedOrders: Order[] = [];
     private orderApi = new OrderApiFactory().create();
     private shopApi = new ShopApiFactory().create();
     private shopName = '';
     private showShopName = false;
+    private showSnackbar = false;
+    private snackbarText = '';
 
     private beforeMount () {
-        // TODO: Chnage to use actual shop id later
-        this.orderApi.findByShopId(1)
-        .then(orders => {
-            this.orders.splice(0, this.orders.length)
-            orders.forEach(v => this.orders.push(new Order(v.id, v.orderNumber, v.orderItems.map(i => new OrderItem(i.id, i.menuItemId, i.quantity)))))
-        })
         this.shopApi.retrieveCurrentShop()
         .then(shop => {
             this.shop = shop
         })
+        console.log(this.$route.query)
+        if (this.$route.query.notify === 'orderAccepted') {
+            this.snackbarText = '주문을 접수했습니다.'
+            this.showSnackbar = true
+        }
+
+        if (this.$route.query.notify === 'orderRejected') {
+            this.snackbarText = '주문을 거절했습니다.'
+            this.showSnackbar = true
+        }
+
+        if (this.$route.query.notify === 'orderFinished') {
+            this.snackbarText = '주문을 완료했습니다.'
+            this.showSnackbar = true
+        }
     }
 
     private onTabSwitch (idx: number) {
         if (idx === 0) {
             this.refreshPendingOrders()
+        }
+        if (idx === 1) {
+            this.refreshInProgressOrders()
+        }
+        if (idx === 2) {
+            this.refreshFinishedOrders()
         }
     }
 
@@ -81,7 +113,23 @@ export default class Home extends Vue {
         this.orderApi.findPendingOrders()
        .then(orders => {
             this.pendingOrders.splice(0, this.pendingOrders.length)
-            orders.forEach(v => this.pendingOrders.push(new Order(v.id, v.orderNumber, v.orderItems.map(i => new OrderItem(i.id, i.menuItemId, i.quantity)))))
+            orders.forEach(v => this.pendingOrders.push(new Order(v.id, v.state, v.orderNumber, v.orderItems.map(i => new OrderItem(i.id, i.menuItemId, i.quantity)))))
+        })
+    }
+
+    private refreshInProgressOrders () {
+        this.orderApi.findInProgressOrders()
+        .then((orders: any) => {
+            this.inProgressOrders.splice(0, this.inProgressOrders.length)
+            orders.forEach((v: OrderResponse) => this.inProgressOrders.push(new Order(v.id, v.state, v.orderNumber, v.orderItems.map((i: any) => new OrderItem(i.id, i.menuItemId, i.quantity)))))
+        })
+    }
+
+    private refreshFinishedOrders () {
+        this.orderApi.findFinishedOrders()
+        .then((orders: any) => {
+            this.finishedOrders.splice(0, this.finishedOrders.length)
+            orders.forEach((v: OrderResponse) => this.finishedOrders.push(new Order(v.id, v.state, v.orderNumber, v.orderItems.map((i: any) => new OrderItem(i.id, i.menuItemId, i.quantity)))))
         })
     }
 }

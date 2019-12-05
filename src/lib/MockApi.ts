@@ -73,32 +73,20 @@ export class MockMenuItemApi implements MenuItemApi {
 
 export class MockOrderApi implements OrderApi {
     public async findById (id: number): Promise<OrderResponse> {
-        return new OrderResponse(1, 1234, [
+        const state = ['PENDING', 'IN_PROGRESS', 'FINISHED'][id % 3]
+        return new OrderResponse(1, state, 1234, [
             new OrderItemResponse(1, 1, 1),
             new OrderItemResponse(2, 1, 1)
         ])
     }
 
-    public async findByShopId (shopId: number): Promise<OrderResponse[]> {
-        return [
-            new OrderResponse(1, 1234, [
-                new OrderItemResponse(1, 1, 1),
-                new OrderItemResponse(2, 1, 1)
-            ]),
-            new OrderResponse(2, 4567, [
-                new OrderItemResponse(3, 1, 1),
-                new OrderItemResponse(4, 2, 1)
-            ])
-        ]
-    }
-
     public async findPendingOrders (): Promise<OrderResponse[]> {
         return [
-            new OrderResponse(1, 1234, [
+            new OrderResponse(3, 'PENDING', 1234, [
                 new OrderItemResponse(1, 1, 1),
                 new OrderItemResponse(2, 1, 1)
             ]),
-            new OrderResponse(2, 4567, [
+            new OrderResponse(6, 'PENDING', 4567, [
                 new OrderItemResponse(3, 1, 1),
                 new OrderItemResponse(4, 2, 1)
             ])
@@ -107,11 +95,11 @@ export class MockOrderApi implements OrderApi {
 
     public async findInProgressOrders (): Promise<OrderResponse[]> {
         return [
-            new OrderResponse(1, 1234, [
+            new OrderResponse(1, 'IN_PROGRESS', 1234, [
                 new OrderItemResponse(1, 1, 1),
                 new OrderItemResponse(2, 1, 1)
             ]),
-            new OrderResponse(2, 4567, [
+            new OrderResponse(4, 'IN_PROGRESS', 4567, [
                 new OrderItemResponse(3, 1, 1),
                 new OrderItemResponse(4, 2, 1)
             ])
@@ -120,11 +108,11 @@ export class MockOrderApi implements OrderApi {
 
     public async findFinishedOrders (): Promise<OrderResponse[]> {
         return [
-            new OrderResponse(1, 1234, [
+            new OrderResponse(2, 'FINISHED', 1234, [
                 new OrderItemResponse(1, 1, 1),
                 new OrderItemResponse(2, 1, 1)
             ]),
-            new OrderResponse(2, 4567, [
+            new OrderResponse(5, 'FINISHED', 4567, [
                 new OrderItemResponse(3, 1, 1),
                 new OrderItemResponse(4, 2, 1)
             ])

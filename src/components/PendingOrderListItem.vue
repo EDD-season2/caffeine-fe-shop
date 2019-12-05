@@ -1,5 +1,5 @@
 <template>
-<router-link :to="`/order/${orderId}`">
+<router-link :to="`/order/${orderId}`" class="d-block py-3">
     <v-list-item>
         <v-list-item-content>
             <v-list-item-title>
