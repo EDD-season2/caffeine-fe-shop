@@ -1,0 +1,19 @@
+name: CI
+
+on: 
+  push:
+    branches: abc
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: github-build
+      run: docker build . Dockerfile --tag kangmin46/frontend-shop:latest
+    - name: docker image push
+      run: |
+        docker login -u ${{DOCKER_USER_NAME}} --password ${{DOCKER_USER_PASSWORD}}
+        docker push kangmin46/frontend-shop:latest
