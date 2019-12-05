@@ -1,25 +1,33 @@
 import { ShopApi } from './ShopApi'
 import ShopResponse from './ShopResponse'
 import { MenuItemApi } from './MenuItemApi'
-import MenuItem from '@/model/MenuItem'
 import MenuItemResponse from './MenuItemResponse'
+import { OrderApi } from './OrderApi'
+import OrderResponse from './OrderResponse'
+import OrderItemResponse from './OrderItemResponse'
 
 const shops: any[] = [
     {
         id: 1,
         name: '스타벅스 잠실점',
         menus: [
-        { id: 1, name: '아메리카노', description: '고소한 아메리카노', price: 2500 }
+        { id: 1, name: '아메리카노', description: '고소한 아메리카노', price: 2500 },
+        { id: 2, name: '카페라떼', description: '고소한 카페라떼', price: 3000 }
     ] },
     { id: 2, name: '스타벅스 송파구청점', menus: [] }
 ]
 const menuItems: any[] = [
-    { id: 1, name: '아메리카노', description: '고소한 아메리카노', price: 2500 }
+    { id: 1, name: '아메리카노', description: '맛있는 아메리카노', price: 2500 },
+    { id: 2, name: '카페라떼', description: '고소한 카페라떼', price: 3000 }
 ]
 let nextId = 3
 let nextMenuItemId = 2
 
 export class MockShopApi implements ShopApi {
+    public async retrieveCurrentShop (): Promise<ShopResponse> {
+        return ShopResponse.from(shops[0])
+    }
+
     public async createShop (name: string): Promise<string> {
         const id = nextId++
         shops.push({ id, name })
@@ -59,6 +67,67 @@ export class MockMenuItemApi implements MenuItemApi {
 
     public async findByShopId (shopId: number): Promise<MenuItemResponse[]> {
         return shops.find(v => v.id === shopId).menus
-        .map(v => MenuItemResponse.from(v))
+        .map((v: any) => MenuItemResponse.from(v))
+    }
+}
+
+export class MockOrderApi implements OrderApi {
+    public async findById (id: number): Promise<OrderResponse> {
+        return new OrderResponse(1, 1234, [
+            new OrderItemResponse(1, 1, 1),
+            new OrderItemResponse(2, 1, 1)
+        ])
+    }
+
+    public async findByShopId (shopId: number): Promise<OrderResponse[]> {
+        return [
+            new OrderResponse(1, 1234, [
+                new OrderItemResponse(1, 1, 1),
+                new OrderItemResponse(2, 1, 1)
+            ]),
+            new OrderResponse(2, 4567, [
+                new OrderItemResponse(3, 1, 1),
+                new OrderItemResponse(4, 2, 1)
+            ])
+        ]
+    }
+
+    public async findPendingOrders (): Promise<OrderResponse[]> {
+        return [
+            new OrderResponse(1, 1234, [
+                new OrderItemResponse(1, 1, 1),
+                new OrderItemResponse(2, 1, 1)
+            ]),
+            new OrderResponse(2, 4567, [
+                new OrderItemResponse(3, 1, 1),
+                new OrderItemResponse(4, 2, 1)
+            ])
+        ]
+    }
+
+    public async findInProgressOrders (): Promise<OrderResponse[]> {
+        return [
+            new OrderResponse(1, 1234, [
+                new OrderItemResponse(1, 1, 1),
+                new OrderItemResponse(2, 1, 1)
+            ]),
+            new OrderResponse(2, 4567, [
+                new OrderItemResponse(3, 1, 1),
+                new OrderItemResponse(4, 2, 1)
+            ])
+        ]
+    }
+
+    public async findFinishedOrders (): Promise<OrderResponse[]> {
+        return [
+            new OrderResponse(1, 1234, [
+                new OrderItemResponse(1, 1, 1),
+                new OrderItemResponse(2, 1, 1)
+            ]),
+            new OrderResponse(2, 4567, [
+                new OrderItemResponse(3, 1, 1),
+                new OrderItemResponse(4, 2, 1)
+            ])
+        ]
     }
 }

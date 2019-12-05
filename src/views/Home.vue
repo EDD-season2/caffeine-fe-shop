@@ -1,9 +1,26 @@
 <template>
 <div>
     <Logo :showHome="false"/>
-    <router-link to="/register" class="mx-2 d-block"><button class="btn-register">매장 등록</button></router-link>
-    <h2 class="title registered-shops-header my-2 mt-4 ml-4">등록된 매장</h2>
-    <ShopList :itemProps="shops"/>
+    <Subtitle :text="shop.name"/>
+    <h2 class="title registered-shops-header my-2 mt-4 ml-4">주문내역</h2>
+    <v-tabs
+        @change="onTabSwitch"
+        :centered="true"
+        :grow="true">
+        <v-tabs-slider></v-tabs-slider>
+        <v-tab>결제된 주문</v-tab>
+        <v-tab>처리중인 주문</v-tab>
+        <v-tab>처리된 주문</v-tab>
+        <v-tab-item>
+            <PendingOrderList :orders="pendingOrders" />
+        </v-tab-item>
+        <v-tab-item>
+            <OrderList :orders="orders" class="mx-3"/>
+        </v-tab-item>
+        <v-tab-item>
+            처리된
+        </v-tab-item>
+    </v-tabs>
 </div>
 </template>
 
@@ -13,28 +30,58 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 import Logo from '@/components/Logo.vue'
-import ShopList from '@/components/ShopList.vue'
-import ShopListItemProp from '@/components/ShopListItem.vue'
+import Subtitle from '@/components/Subtitle.vue'
+import OrderList from '@/components/OrderList.vue'
+import PendingOrderList from '@/components/PendingOrderList.vue'
 
 import { ShopApiFactory } from '@/lib/ShopApi'
 import Shop from '../model/Shop'
+import Order from '../model/Order'
+import { OrderApiFactory } from '../lib/OrderApi'
+import OrderItem from '../model/OrderItem'
+import ShopResponse from '../lib/ShopResponse'
 
 @Component({
     components: {
         Logo,
-        ShopList
+        Subtitle,
+        OrderList,
+        PendingOrderList
     }
 })
 export default class Home extends Vue {
-    private shops: Shop[] = [];
+    private shop: ShopResponse = new ShopResponse(0, '');
+    private orders: Order[] = [];
+    private pendingOrders: Order[] = [];
+    private orderApi = new OrderApiFactory().create();
+    private shopApi = new ShopApiFactory().create();
+    private shopName = '';
+    private showShopName = false;
 
-    constructor () {
-      super()
-        const { shops } = this
-        new ShopApiFactory().create().findAllShops()
-        .then(_shops => {
-            this.shops.splice(0, this.shops.length)
-            _shops.map(res => new Shop(res.id, res.name)).forEach(v => this.shops.push(v))
+    private beforeMount () {
+        // TODO: Chnage to use actual shop id later
+        this.orderApi.findByShopId(1)
+        .then(orders => {
+            this.orders.splice(0, this.orders.length)
+            orders.forEach(v => this.orders.push(new Order(v.id, v.orderNumber, v.orderItems.map(i => new OrderItem(i.id, i.menuItemId, i.quantity)))))
+        })
+        this.shopApi.retrieveCurrentShop()
+        .then(shop => {
+            this.shop = shop
+        })
+    }
+
+    private onTabSwitch (idx: number) {
+        if (idx === 0) {
+            this.refreshPendingOrders()
+        }
+    }
+
+    private refreshPendingOrders () {
+        this.orderApi.findPendingOrders()
+       .then(orders => {
+            this.pendingOrders.splice(0, this.pendingOrders.length)
+            orders.forEach(v => this.pendingOrders.push(new Order(v.id, v.orderNumber, v.orderItems.map(i => new OrderItem(i.id, i.menuItemId, i.quantity)))))
         })
     }
 }

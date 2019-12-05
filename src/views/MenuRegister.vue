@@ -35,11 +35,6 @@ export default class MenuRegister extends Vue {
     }
 
     private onSubmit () {
-        console.log({
-            name: this.menuItemName,
-            desc: this.menuItemDescription,
-            price: this.menuItemPrice
-        })
         new MenuItemApiFactory().create().addMenu(
             this.menuItemName,
             this.menuItemDescription,

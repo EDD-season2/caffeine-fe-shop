@@ -22,13 +22,18 @@ const routes = [
   },
   {
     path: '/shop/:shopId/menu-register',
-    name: 'menu-register',
+    name: 'menuRegister',
     component: () => import('../views/MenuRegister.vue')
   },
   {
     path: '/shop/:shopId/menu/:menuItemId',
     name: 'menuInfo',
     component: () => import('../views/MenuItemDetail.vue')
+  },
+  {
+    path: '/order/:orderId',
+    name: 'orderDetail',
+    component: () => import('../views/OrderDetail.vue')
   }
 ]
 

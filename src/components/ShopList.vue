@@ -27,8 +27,6 @@ export default class ShopList extends Vue {
 
 <style lang="scss" scoped>
 .shop-list {
-    // background: #ff7f50d6;
     list-style: none;
-    // padding-left: 0;
 }
 </style>

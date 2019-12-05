@@ -1,22 +1,18 @@
 import ShopResponse from './ShopResponse'
-import MenuItem from '@/model/MenuItem'
 import { MockShopApi } from './MockApi'
 
 export interface ShopApi {
     // Returns location of shop entity resource
-    createShop: (name: string) => Promise<string>
-    findAllShops: () => Promise<ShopResponse[]>
-    findById: (id: number) => Promise<ShopResponse>
+    retrieveCurrentShop(): Promise<ShopResponse>
+    createShop(name: string): Promise<string>
+    findAllShops(): Promise<ShopResponse[]>
+    findById(id: number): Promise<ShopResponse>
 }
 
-export interface ShopApiFactory {
-    create: () => ShopApi
-}
-
-export class ShopApiFactory implements ShopApiFactory {
+export class ShopApiFactory {
     private static instance: ShopApi;
 
-    public create = (): ShopApi => {
+    public create (): ShopApi {
         if (!ShopApiFactory.instance) {
             ShopApiFactory.instance = new MockShopApi()
         }
