@@ -1,3 +1,5 @@
 FROM nginx
 
-COPY . /usr/src/app/build
+RUN ls -al
+WORKDIR /usr/src/app/public 
+COPY . /usr/src/app/public
