@@ -15,5 +15,5 @@ jobs:
       run: docker build . Dockerfile --tag kangmin46/frontend-shop:latest
     - name: docker image push
       run: |
-        docker login -u ${{DOCKER_USER_NAME}} --password ${{DOCKER_USER_PASSWORD}}
+        docker login -u ${{secrets.DOCKER_USER_NAME}} --password ${{secrets.DOCKER_USER_PASSWORD}}
         docker push kangmin46/frontend-shop:latest
