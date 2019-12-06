@@ -80,7 +80,7 @@ export default class Home extends Vue {
         .then(shop => {
             this.shop = shop
         })
-        console.log(this.$route.query)
+
         if (this.$route.query.notify === 'orderAccepted') {
             this.snackbarText = '주문을 접수했습니다.'
             this.showSnackbar = true

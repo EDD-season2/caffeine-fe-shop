@@ -22,6 +22,6 @@ import Order from '../model/Order'
 })
 export default class PendingOrderList extends Vue {
     @Prop() private orders!: Order[];
-    private orderText = '주문~';
+    private orderText = '아메리카노(1) 외';
 }
 </script>
