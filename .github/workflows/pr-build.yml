@@ -1,4 +1,4 @@
-name: CI-SHOP
+name: Build on PR
 
 on:
   pull_request:
