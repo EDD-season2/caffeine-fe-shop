@@ -1,5 +1,5 @@
-import { MockMenuItemApi } from './MockApi'
 import MenuItemResponse from './MenuItemResponse'
+import MenuItemHttpApi from './MenuItemHttpApi'
 
 export interface MenuItemApi {
     findById(id: number): Promise<MenuItemResponse>
@@ -12,7 +12,7 @@ export class MenuItemApiFactory {
 
     public create (): MenuItemApi {
         if (!MenuItemApiFactory.instance) {
-            MenuItemApiFactory.instance = new MockMenuItemApi()
+            MenuItemApiFactory.instance = new MenuItemHttpApi()
         }
         return MenuItemApiFactory.instance
     }
