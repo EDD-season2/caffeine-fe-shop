@@ -64,7 +64,7 @@ import OrderResponse from '../lib/OrderResponse'
     }
 })
 export default class Home extends Vue {
-    private shop: ShopResponse = new ShopResponse(0, '');
+    private shop: ShopResponse = new ShopResponse(0, '', '', '', '');
     private pendingOrders: Order[] = [];
     private inProgressOrders: Order[] = [];
     private finishedOrders: Order[] = [];
