@@ -1,5 +1,5 @@
 import ShopResponse from './ShopResponse'
-import { MockShopApi } from './MockApi'
+import ShopHttpApi from './ShopHttpApi'
 
 export interface ShopApi {
     // Returns location of shop entity resource
@@ -14,7 +14,7 @@ export class ShopApiFactory {
 
     public create (): ShopApi {
         if (!ShopApiFactory.instance) {
-            ShopApiFactory.instance = new MockShopApi()
+            ShopApiFactory.instance = new ShopHttpApi()
         }
         return ShopApiFactory.instance
     }
