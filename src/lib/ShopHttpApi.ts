@@ -3,9 +3,9 @@ import ShopResponse from './ShopResponse'
 import RequestWrapper from './RequestWrapper'
 
 export default class ShopHttpApi implements ShopApi {
-    // Returns location of shop entity resource
     public async retrieveCurrentShop (): Promise<ShopResponse> {
-        const res = await RequestWrapper.get('/v1/shops/100')
+        // TODO: change when avaiable
+        const res = await RequestWrapper.get('/v1/shops/102')
         return ShopResponse.from(res.data)
     }
 
