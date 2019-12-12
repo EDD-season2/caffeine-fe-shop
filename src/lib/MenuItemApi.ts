@@ -1,10 +1,10 @@
-import { MockMenuItemApi } from './MockApi'
-import MenuItemResponse from './MenuItemResponse'
+import MenuItemHttpApi from './MenuItemHttpApi'
+import MenuItem from '@/model/MenuItem'
 
 export interface MenuItemApi {
-    findById(id: number): Promise<MenuItemResponse>
-    addMenu(name: string, desc: string, price: number, shopId: number): Promise<MenuItemResponse>
-    findByShopId(shopId: number): Promise<MenuItemResponse[]>
+    findById(id: number): Promise<MenuItem>
+    addMenu(name: string, desc: string, price: number, shopId: number): Promise<MenuItem>
+    findByShopId(shopId: number): Promise<MenuItem[]>
 }
 
 export class MenuItemApiFactory {
@@ -12,7 +12,7 @@ export class MenuItemApiFactory {
 
     public create (): MenuItemApi {
         if (!MenuItemApiFactory.instance) {
-            MenuItemApiFactory.instance = new MockMenuItemApi()
+            MenuItemApiFactory.instance = new MenuItemHttpApi()
         }
         return MenuItemApiFactory.instance
     }

@@ -5,7 +5,15 @@ export default class OrderItem {
         private _quantity: number
     ) {}
 
+    public static from (json: any) {
+        return new OrderItem(
+            json.id,
+            json.menuItemId,
+            json.quantity
+        )
+    }
+
     get id () { return this._id }
-    get menuItem () { return this._menuItemId }
+    get menuItemId () { return this._menuItemId }
     get quantity () { return this._quantity }
 }

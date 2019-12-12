@@ -2,17 +2,17 @@
 <div>
     <Logo />
     <Subtitle text="주문 상세"/>
-    <h3 class="headline text-center my-3" v-if="order.state !== 'PENDING'">주문번호 {{ order.orderNumber }}</h3>
+    <h3 class="headline text-center my-3" v-if="order.state !== 'PENDING'">주문번호 {{ 1234 }}</h3>
 
     <v-card flat class="py-3">
         <OrderItemListItem v-for="(item) in order.orderItems"
             v-bind:key="item.id" :orderItem="item"/>
     </v-card>
-    <v-row class="justify-space-around px-5 mx-5" v-if="isOrderPending()">
+    <v-row class="justify-space-around px-5 mx-5" v-if="isOrderPending">
         <v-btn elevation="0" color="error" @click="onRejectClick">거절하기</v-btn>
         <v-btn elevation="0" color="primary" @click="onAcceptClick">주문 접수</v-btn>
     </v-row>
-    <v-row class="justify-center px-5 mx-5" v-if="isOrderInProgress()">
+    <v-row class="justify-center px-5 mx-5" v-if="isOrderInProgress">
         <v-btn elevation="0" color="primary" @click="onFinishClick">주문 완료</v-btn>
     </v-row>
     <v-dialog v-model="showAcceptDialog">
@@ -81,10 +81,10 @@ import Subtitle from '@/components/Subtitle.vue'
 import OrderItemListItem from '@/components/OrderItemListItem.vue'
 
 import { OrderApiFactory } from '../lib/OrderApi'
-import OrderResponse from '../lib/OrderResponse'
 import Order from '../model/Order'
 import OrderItem from '../model/OrderItem'
 import { Prop } from 'vue-property-decorator'
+import MenuItem from '../model/MenuItem'
 
 @Component({
     components: {
@@ -94,27 +94,23 @@ import { Prop } from 'vue-property-decorator'
     }
 })
 export default class OrderDetail extends Vue {
-    private isPending!: boolean
-    private order: Order = new Order(0, 'PENDING', 0, []);
+    private order: Order = new Order(0, 'FINISHED', 0, []);
     private showAcceptDialog = false;
     private showRejectDialog = false;
     private showFinishDialog = false;
     private showRejectReasonInput = false;
     private rejectReasonSelected = 0;
 
-    private beforeMount () {
+    private async beforeMount () {
         // TODO: Must be changed later
-        new OrderApiFactory().create().findById(Number(this.$route.params.orderId))
-        .then(order => {
-            this.order = new Order(order.id, order.state, order.orderNumber, order.orderItems.map(v => new OrderItem(v.id, v.menuItemId, v.quantity)))
-        })
+        this.order = await new OrderApiFactory().create().findById(this.$store.state.currentShopId, Number(this.$route.params.orderId))
     }
 
-    private isOrderPending () {
+    private get isOrderPending () {
         return this.order.state === 'PENDING'
     }
 
-    private isOrderInProgress () {
+    private get isOrderInProgress () {
         return this.order.state === 'IN_PROGRESS'
     }
 
@@ -123,6 +119,12 @@ export default class OrderDetail extends Vue {
     }
 
     private onAcceptDialogResolve () {
+        new OrderApiFactory().create().acceptOrder(this.$store.state.currentShopId, this.order.id)
+        .then(status => {
+            if (status === 200) {
+                this.$store.dispatch('refreshPending')
+            }
+        })
         this.showAcceptDialog = false
         this.$router.push('/?notify=orderAccepted')
     }
@@ -145,6 +147,12 @@ export default class OrderDetail extends Vue {
     }
 
     private onFinishDialogResolve () {
+        new OrderApiFactory().create().finishOrder(this.$store.state.currentShopId, this.order.id)
+        .then(status => {
+            if (status === 200) {
+                this.$store.dispatch('refreshFinished')
+            }
+        })
         this.showFinishDialog = false
         this.$router.push('/?notify=orderFinished')
     }

@@ -21,9 +21,9 @@
             <OrderList :orders="finishedOrders" class="mx-3"/>
         </v-tab-item>
     </v-tabs>
-        <v-snackbar
-            class="mx-3 mb-2"
-            v-model="showSnackbar">
+    <v-snackbar
+        class="mx-3 mb-2"
+        v-model="showSnackbar">
         {{ snackbarText }}
         <v-btn
           color="pink"
@@ -51,9 +51,6 @@ import Shop from '../model/Shop'
 import Order from '../model/Order'
 import { OrderApiFactory } from '../lib/OrderApi'
 import OrderItem from '../model/OrderItem'
-import ShopResponse from '../lib/ShopResponse'
-import OrderItemResponse from '../lib/OrderItemResponse'
-import OrderResponse from '../lib/OrderResponse'
 
 @Component({
     components: {
@@ -64,11 +61,7 @@ import OrderResponse from '../lib/OrderResponse'
     }
 })
 export default class Home extends Vue {
-    private shop: ShopResponse = new ShopResponse(0, '');
-    private pendingOrders: Order[] = [];
-    private inProgressOrders: Order[] = [];
-    private finishedOrders: Order[] = [];
-    private orderApi = new OrderApiFactory().create();
+    private shop: Shop = new Shop(0, '', '', '', '');
     private shopApi = new ShopApiFactory().create();
     private shopName = '';
     private showShopName = false;
@@ -82,55 +75,40 @@ export default class Home extends Vue {
         })
 
         if (this.$route.query.notify === 'orderAccepted') {
-            this.snackbarText = '주문을 접수했습니다.'
-            this.showSnackbar = true
+            this.$emit('notify', '주문을 접수했습니다.')
         }
 
         if (this.$route.query.notify === 'orderRejected') {
-            this.snackbarText = '주문을 거절했습니다.'
-            this.showSnackbar = true
+            this.$emit('notify', '주문을 거절했습니다.')
         }
 
         if (this.$route.query.notify === 'orderFinished') {
-            this.snackbarText = '주문을 완료했습니다.'
-            this.showSnackbar = true
+            this.$emit('notify', '주문을 완료했습니다.')
         }
     }
 
     private onTabSwitch (idx: number) {
         if (idx === 0) {
-            this.refreshPendingOrders()
+            this.$store.dispatch('refreshPending')
         }
         if (idx === 1) {
-            this.refreshInProgressOrders()
+            this.$store.dispatch('refreshInProgress')
         }
         if (idx === 2) {
-            this.refreshFinishedOrders()
+            this.$store.dispatch('refreshFinished')
         }
     }
 
-    private refreshPendingOrders () {
-        this.orderApi.findPendingOrders()
-       .then(orders => {
-            this.pendingOrders.splice(0, this.pendingOrders.length)
-            orders.forEach(v => this.pendingOrders.push(new Order(v.id, v.state, v.orderNumber, v.orderItems.map(i => new OrderItem(i.id, i.menuItemId, i.quantity)))))
-        })
+    private get pendingOrders () {
+        return this.$store.state.orders.pending
     }
 
-    private refreshInProgressOrders () {
-        this.orderApi.findInProgressOrders()
-        .then((orders: any) => {
-            this.inProgressOrders.splice(0, this.inProgressOrders.length)
-            orders.forEach((v: OrderResponse) => this.inProgressOrders.push(new Order(v.id, v.state, v.orderNumber, v.orderItems.map((i: any) => new OrderItem(i.id, i.menuItemId, i.quantity)))))
-        })
+    private get inProgressOrders () {
+        return this.$store.state.orders.inProgress
     }
 
-    private refreshFinishedOrders () {
-        this.orderApi.findFinishedOrders()
-        .then((orders: any) => {
-            this.finishedOrders.splice(0, this.finishedOrders.length)
-            orders.forEach((v: OrderResponse) => this.finishedOrders.push(new Order(v.id, v.state, v.orderNumber, v.orderItems.map((i: any) => new OrderItem(i.id, i.menuItemId, i.quantity)))))
-        })
+    private get finishedOrders () {
+        return this.$store.state.orders.finished
     }
 }
 </script>

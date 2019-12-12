@@ -2,7 +2,7 @@
 <router-link :to="`/order/${order.id}`" class="d-block py-3">
     <v-list-item>
         <v-list-item-content>
-            <v-list-item-title>{{ orderText }}</v-list-item-title>
+            <v-list-item-title>{{ order.orderItems[0].name }}</v-list-item-title>
         </v-list-item-content>
     </v-list-item>
 </router-link>
