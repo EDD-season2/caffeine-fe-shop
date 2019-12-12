@@ -46,7 +46,7 @@ export default class ShopInfo extends Vue {
         .then(() => menuItemApi.findByShopId(this.shopId))
         .then(menus => {
             this.menuItems.splice(this.menuItems.length)
-            menus.forEach(v => this.menuItems.push(new MenuItem(v.id, v.name, v.description, v.price)))
+            menus.forEach(v => this.menuItems.push(v))
         })
     }
 

@@ -39,9 +39,8 @@ export default class App extends Vue {
         // TODO: change shop id later
         this.eventSource = RequestWrapper.subscribe('/v1/subscribe/shops/102')
         this.eventSource.onmessage = (evt) => {
-            this.snackbarText = evt.data
-            this.showSnackbar = true
-            this.$store.commit('refreshPending')
+            this.handleNotify(evt.data)
+            this.$store.dispatch('refreshPending')
         }
         this.eventSource.onerror = () => {
             this.subscribe()
@@ -49,8 +48,10 @@ export default class App extends Vue {
     }
 
     private handleNotify (message: string) {
-        this.snackbarText = message
-        this.showSnackbar = true
+        if (message !== 'ok') {
+            this.snackbarText = message
+            this.showSnackbar = true
+        }
     }
 }
 </script>

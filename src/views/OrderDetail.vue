@@ -81,7 +81,6 @@ import Subtitle from '@/components/Subtitle.vue'
 import OrderItemListItem from '@/components/OrderItemListItem.vue'
 
 import { OrderApiFactory } from '../lib/OrderApi'
-import OrderResponse from '../lib/OrderResponse'
 import Order from '../model/Order'
 import OrderItem from '../model/OrderItem'
 import { Prop } from 'vue-property-decorator'
