@@ -1,7 +1,7 @@
 <template>
 <v-card flat>
     <template v-for="(item) in orders">
-        <PendingOrderListItem :orderText="orderText" :orderId="item.id" v-bind:key="item.id"/>
+        <PendingOrderListItem :orderText="item.orderItems[0].name" :orderId="item.id" v-bind:key="item.id"/>
     </template>
 </v-card>
 </template>
