@@ -9,8 +9,8 @@
             v-bind:key="item.id" :orderItem="item"/>
     </v-card>
     <v-row class="justify-space-around px-5 mx-5" v-if="isOrderPending()">
-        <v-btn elevation="0" color="error" @click="onRejectClick">거절하기</v-btn>
         <v-btn elevation="0" color="primary" @click="onAcceptClick">주문 접수</v-btn>
+        <v-btn elevation="0" color="error" @click="onRejectClick">거절하기</v-btn>
     </v-row>
     <v-row class="justify-center px-5 mx-5" v-if="isOrderInProgress()">
         <v-btn elevation="0" color="primary" @click="onFinishClick">주문 완료</v-btn>
