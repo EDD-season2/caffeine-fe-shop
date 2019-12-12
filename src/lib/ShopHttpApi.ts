@@ -1,12 +1,12 @@
 import { ShopApi } from './ShopApi'
-import ShopResponse from './ShopResponse'
 import RequestWrapper from './RequestWrapper'
+import Shop from '@/model/Shop'
 
 export default class ShopHttpApi implements ShopApi {
-    public async retrieveCurrentShop (): Promise<ShopResponse> {
+    public async retrieveCurrentShop (): Promise<Shop> {
         // TODO: change when avaiable
         const res = await RequestWrapper.get('/v1/shops/102')
-        return ShopResponse.from(res.data)
+        return Shop.from(res.data)
     }
 
     public async createShop (name: string): Promise<string> {
@@ -20,13 +20,13 @@ export default class ShopHttpApi implements ShopApi {
         .headers.Location
     }
 
-    public async findAllShops (): Promise<ShopResponse[]> {
+    public async findAllShops (): Promise<Shop[]> {
         const res = await RequestWrapper.get('/v1/shops')
-        return res.data.map((v: any) => ShopResponse.from(v))
+        return res.data.map((v: any) => Shop.from(v))
     }
 
-    public async findById (id: number): Promise<ShopResponse> {
+    public async findById (id: number): Promise<Shop> {
         const res = (await RequestWrapper.get(`/v1/shops/${id}`))
-        return ShopResponse.from(res)
+        return Shop.from(res)
     }
 }
