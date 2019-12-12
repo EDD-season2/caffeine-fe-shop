@@ -18,21 +18,24 @@ export default class OrderHttpApi implements OrderApi {
     }
 
     public async findInProgressOrders (shopId: number): Promise<Order[]> {
-        return this.findByStatus(shopId, 'pending')
+        return this.findByStatus(shopId, 'in_progress')
     }
 
     public async findFinishedOrders (shopId: number): Promise<Order[]> {
         return this.findByStatus(shopId, 'finished')
     }
 
-    public async acceptOrder (id: number): Promise<any> {
-        return {}
+    public async acceptOrder (shopId: number, id: number): Promise<number> {
+        const res = await RequestWrapper.put(`/v1/shops/${shopId}/orders/${id}/accept`, {})
+        return res.status
     }
 
-    public async rejectOrder (id: number): Promise<any> {
-        return {}
+    public async rejectOrder (shopId: number, id: number): Promise<number> {
+        const res = await RequestWrapper.put(`/v1/shops/${shopId}/orders/${id}/reject`, {})
+        return res.status
     }
-    public async finishOrder (id: number): Promise<any> {
-        return {}
+    public async finishOrder (shopId: number, id: number): Promise<any> {
+        const res = await RequestWrapper.put(`/v1/shops/${shopId}/orders/${id}/finish`, {})
+        return res.status
     }
 }

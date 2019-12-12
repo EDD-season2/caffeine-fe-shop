@@ -11,7 +11,7 @@ export default class Order {
     public static from (json: any): Order {
         return new Order(
             json.id,
-            json.state,
+            json.status,
             json.orderNumber,
             json.orderItems.map((v: any) => MenuItem.from(v))
         )

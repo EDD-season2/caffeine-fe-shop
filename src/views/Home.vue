@@ -75,18 +75,15 @@ export default class Home extends Vue {
         })
 
         if (this.$route.query.notify === 'orderAccepted') {
-            this.snackbarText = '주문을 접수했습니다.'
-            this.showSnackbar = true
+            this.$emit('notify', '주문을 접수했습니다.')
         }
 
         if (this.$route.query.notify === 'orderRejected') {
-            this.snackbarText = '주문을 거절했습니다.'
-            this.showSnackbar = true
+            this.$emit('notify', '주문을 거절했습니다.')
         }
 
         if (this.$route.query.notify === 'orderFinished') {
-            this.snackbarText = '주문을 완료했습니다.'
-            this.showSnackbar = true
+            this.$emit('notify', '주문을 완료했습니다.')
         }
     }
 

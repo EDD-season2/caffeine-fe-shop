@@ -6,9 +6,9 @@ export interface OrderApi {
     findPendingOrders(shopId: number): Promise<Order[]>
     findInProgressOrders(shopId: number): Promise<Order[]>
     findFinishedOrders(shopId: number): Promise<Order[]>
-    acceptOrder(id: number): Promise<any>
-    rejectOrder(id: number): Promise<any>
-    finishOrder(id: number): Promise<any>
+    acceptOrder(shopId: number, id: number): Promise<number>
+    rejectOrder(shopId: number, id: number): Promise<number>
+    finishOrder(shopId: number, id: number): Promise<number>
 }
 
 export class OrderApiFactory {

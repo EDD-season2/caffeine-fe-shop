@@ -1,7 +1,7 @@
 <template>
 <v-app>
     <v-content>
-        <router-view/>
+        <router-view @notify="handleNotify"/>
     </v-content>
     <v-snackbar
         class="mx-3 mb-2"
@@ -46,6 +46,11 @@ export default class App extends Vue {
         this.eventSource.onerror = () => {
             this.subscribe()
         }
+    }
+
+    private handleNotify (message: string) {
+        this.snackbarText = message
+        this.showSnackbar = true
     }
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
 <div>
     <v-row class="justify-space-around py-2 px-3">
-        <span class="subtitle-1">{{ orderedMenu.name }}</span>
-        <span>수량 {{ orderItem.quantity }}</span>
+        <span class="subtitle-1">{{ orderItem.name }}</span>
+        <span>수량 {{ 1 }}</span>
     </v-row>
     <v-divider class="my-3"/>
 </div>
@@ -19,12 +19,10 @@ import { MenuItemApiFactory } from '../lib/MenuItemApi'
 
 @Component
 export default class OrderItemListItem extends Vue {
-    @Prop() private orderItem!: OrderItem;
-    private orderedMenu: MenuItem = new MenuItem(0, '', '', 0);
+    @Prop() private orderItem!: MenuItem;
 
-    private beforeMount () {
-        new MenuItemApiFactory().create().findById(this.orderItem.id)
-        .then(menu => { this.orderedMenu = new MenuItem(menu.id, menu.name, menu.description, menu.price) })
+    private async beforeMount () {
+        const menuItem = await new MenuItemApiFactory().create().findById(this.orderItem.id)
     }
 }
 </script>
