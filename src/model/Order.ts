@@ -1,13 +1,21 @@
-import OrderItem from './OrderItem'
+import MenuItem from './MenuItem'
 
 export default class Order {
     constructor (
         private _id: number,
-        // 주문 번호. 주문 id와는 다른 값임
         private _state: string,
         private _orderNumber: number,
-        private _orderItems: OrderItem[]
+        private _orderItems: MenuItem[]
     ) {}
+
+    public static from (json: any): Order {
+        return new Order(
+            json.id,
+            json.status,
+            json.orderNumber,
+            json.orderItems.map((v: any) => MenuItem.from(v))
+        )
+    }
 
     get id () { return this._id }
     get state () { return this._state }

@@ -1,11 +1,14 @@
-import { MockOrderApi } from './MockApi'
-import OrderResponse from './OrderResponse'
+import OrderHttpApi from './OrderHttpApi'
+import Order from '@/model/Order'
 
 export interface OrderApi {
-    findById(id: number): Promise<OrderResponse>
-    findPendingOrders(): Promise<OrderResponse[]>
-    findInProgressOrders(): Promise<OrderResponse[]>
-    findFinishedOrders(): Promise<OrderResponse[]>
+    findById(shopId: number, orderId: number): Promise<Order>
+    findPendingOrders(shopId: number): Promise<Order[]>
+    findInProgressOrders(shopId: number): Promise<Order[]>
+    findFinishedOrders(shopId: number): Promise<Order[]>
+    acceptOrder(shopId: number, id: number): Promise<number>
+    rejectOrder(shopId: number, id: number): Promise<number>
+    finishOrder(shopId: number, id: number): Promise<number>
 }
 
 export class OrderApiFactory {
@@ -13,7 +16,7 @@ export class OrderApiFactory {
 
     public create (): OrderApi {
         if (!OrderApiFactory.instance) {
-            OrderApiFactory.instance = new MockOrderApi()
+            OrderApiFactory.instance = new OrderHttpApi()
         }
         return OrderApiFactory.instance
     }
