@@ -3,17 +3,49 @@
     <v-content>
         <router-view/>
     </v-content>
+    <v-snackbar
+        class="mx-3 mb-2"
+        v-model="showSnackbar">
+        {{ snackbarText }}
+        <v-btn
+          color="pink"
+          text
+          @click="showSnackbar = false"
+        >
+          Close
+        </v-btn>
+    </v-snackbar>
 </v-app>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import Component from 'vue-class-component'
 
-export default Vue.extend({
-  name: 'App',
+import RequestWrapper from './lib/RequestWrapper'
 
-  data: () => ({
-    //
-  })
-})
+@Component
+export default class App extends Vue {
+    private showSnackbar = false;
+    private snackbarText = '';
+
+    private eventSource?: EventSource;
+
+    private beforeMount () {
+        this.subscribe()
+    }
+
+    private subscribe () {
+        // TODO: change shop id later
+        this.eventSource = RequestWrapper.subscribe('/v1/subscribe/shops/102')
+        this.eventSource.onmessage = (evt) => {
+            this.snackbarText = evt.data
+            this.showSnackbar = true
+            this.$store.commit('refreshPending')
+        }
+        this.eventSource.onerror = () => {
+            this.subscribe()
+        }
+    }
+}
 </script>
