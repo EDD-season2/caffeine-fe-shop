@@ -5,13 +5,13 @@ import Shop from '@/model/Shop'
 export default class ShopHttpApi implements ShopApi {
     public async retrieveCurrentShop (): Promise<Shop> {
         // TODO: change when avaiable
-        const res = await RequestWrapper.get('/api/v1/shops/110')
+        const res = await RequestWrapper.get('/v1/shops/110')
         return Shop.from(res.data)
     }
 
     public async createShop (name: string): Promise<string> {
         // TODO: fill the body
-        return (await RequestWrapper.post('/api/v1/shops', {
+        return (await RequestWrapper.post('/v1/shops', {
             name,
             image: '',
             address: '',
@@ -21,12 +21,12 @@ export default class ShopHttpApi implements ShopApi {
     }
 
     public async findAllShops (): Promise<Shop[]> {
-        const res = await RequestWrapper.get('/api/v1/shops')
+        const res = await RequestWrapper.get('/v1/shops')
         return res.data.map((v: any) => Shop.from(v))
     }
 
     public async findById (id: number): Promise<Shop> {
-        const res = (await RequestWrapper.get(`/api/v1/shops/${id}`))
+        const res = (await RequestWrapper.get(`/v1/shops/${id}`))
         return Shop.from(res)
     }
 }
