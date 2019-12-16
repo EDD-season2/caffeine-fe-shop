@@ -1,7 +1,7 @@
 import Axios from 'axios'
 
 export default class RequestWrapper {
-    private static readonly BASE_URL = '';
+    private static readonly BASE_URL = '/api';
 
     public static subscribe (url: string) {
         return new EventSource(`${RequestWrapper.BASE_URL}${url}`)

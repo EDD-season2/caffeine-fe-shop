@@ -51,6 +51,7 @@ import Shop from '../model/Shop'
 import Order from '../model/Order'
 import { OrderApiFactory } from '../lib/OrderApi'
 import OrderItem from '../model/OrderItem'
+import LoginNeededView from './LoginNeededView'
 
 @Component({
     components: {
@@ -60,20 +61,17 @@ import OrderItem from '../model/OrderItem'
         PendingOrderList
     }
 })
-export default class Home extends Vue {
+export default class Home extends LoginNeededView {
     private shop: Shop = new Shop(0, '', '', '', '');
     private shopApi = new ShopApiFactory().create();
-    private shopName = '';
-    private showShopName = false;
     private showSnackbar = false;
     private snackbarText = '';
 
-    private beforeMount () {
-        this.shopApi.retrieveCurrentShop()
+    private async created () {
+        this.currentShop
         .then(shop => {
             this.shop = shop
         })
-
         if (this.$route.query.notify === 'orderAccepted') {
             this.$emit('notify', '주문을 접수했습니다.')
         }

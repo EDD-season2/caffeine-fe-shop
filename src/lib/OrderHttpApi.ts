@@ -4,7 +4,7 @@ import Order from '@/model/Order'
 
 export default class OrderHttpApi implements OrderApi {
     public async findById (shopId: number, orderId: number): Promise<Order> {
-        const res = await RequestWrapper.get(`/api/v1/shops/${shopId}/orders/${orderId}`)
+        const res = await RequestWrapper.get(`/v1/shops/${shopId}/orders/${orderId}`)
         return Order.from(res.data)
     }
 
@@ -13,7 +13,7 @@ export default class OrderHttpApi implements OrderApi {
     }
 
     private async findByStatus (shopId: number, status: string) {
-        const res = await RequestWrapper.get(`/api/v1/shops/${shopId}/orders?status=${status}`)
+        const res = await RequestWrapper.get(`/v1/shops/${shopId}/orders?status=${status}`)
         return res.data.map((v: any) => Order.from(v))
     }
 
@@ -26,16 +26,16 @@ export default class OrderHttpApi implements OrderApi {
     }
 
     public async acceptOrder (shopId: number, id: number): Promise<number> {
-        const res = await RequestWrapper.put(`/api/v1/shops/${shopId}/orders/${id}/accept`, {})
+        const res = await RequestWrapper.put(`/v1/shops/${shopId}/orders/${id}/accept`, {})
         return res.status
     }
 
     public async rejectOrder (shopId: number, id: number): Promise<number> {
-        const res = await RequestWrapper.put(`/api/v1/shops/${shopId}/orders/${id}/reject`, {})
+        const res = await RequestWrapper.put(`/v1/shops/${shopId}/orders/${id}/reject`, {})
         return res.status
     }
     public async finishOrder (shopId: number, id: number): Promise<any> {
-        const res = await RequestWrapper.put(`/api/v1/shops/${shopId}/orders/${id}/finish`, {})
+        const res = await RequestWrapper.put(`/v1/shops/${shopId}/orders/${id}/finish`, {})
         return res.status
     }
 }
