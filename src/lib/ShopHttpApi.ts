@@ -6,6 +6,9 @@ export default class ShopHttpApi implements ShopApi {
     public async retrieveCurrentShop (): Promise<Shop> {
         // TODO: change when avaiable
         const res = await RequestWrapper.get('/v1/shops/110')
+        if (res.status === 401) {
+            return Shop.UNAUTHENTICATED
+        }
         return Shop.from(res.data)
     }
 
