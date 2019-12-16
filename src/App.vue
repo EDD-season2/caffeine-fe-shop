@@ -31,19 +31,21 @@ export default class App extends Vue {
 
     private eventSource?: EventSource;
 
-    private beforeMount () {
+    private created () {
         this.subscribe()
     }
 
     private subscribe () {
         // TODO: change shop id later
-        this.eventSource = RequestWrapper.subscribe('/api/v1/subscribe/shops/110')
-        this.eventSource.onmessage = (evt) => {
-            this.handleNotify(evt.data)
-            this.$store.dispatch('refreshPending')
-        }
-        this.eventSource.onerror = () => {
-            this.subscribe()
+        if (!this.eventSource) {
+            this.eventSource = RequestWrapper.subscribe('/v1/subscribe/shops/110')
+            this.eventSource.onmessage = (evt) => {
+                this.handleNotify(evt.data)
+                this.$store.dispatch('refreshPending')
+            }
+            this.eventSource.onerror = () => {
+                this.subscribe()
+            }
         }
     }
 
