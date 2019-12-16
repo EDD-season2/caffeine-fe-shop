@@ -103,7 +103,7 @@ export default class OrderDetail extends Vue {
 
     private async beforeMount () {
         // TODO: Must be changed later
-        this.order = await new OrderApiFactory().create().findById(this.$store.state.currentShopId, Number(this.$route.params.orderId))
+        this.order = await new OrderApiFactory().create().findById(this.$store.state.currentShop.id, Number(this.$route.params.orderId))
     }
 
     private get isOrderPending () {
@@ -119,7 +119,7 @@ export default class OrderDetail extends Vue {
     }
 
     private onAcceptDialogResolve () {
-        new OrderApiFactory().create().acceptOrder(this.$store.state.currentShopId, this.order.id)
+        new OrderApiFactory().create().acceptOrder(this.$store.state.currentShop.id, this.order.id)
         .then(status => {
             if (status === 200) {
                 this.$store.dispatch('refreshPending')
@@ -147,7 +147,7 @@ export default class OrderDetail extends Vue {
     }
 
     private onFinishDialogResolve () {
-        new OrderApiFactory().create().finishOrder(this.$store.state.currentShopId, this.order.id)
+        new OrderApiFactory().create().finishOrder(this.$store.state.currentShop.id, this.order.id)
         .then(status => {
             if (status === 200) {
                 this.$store.dispatch('refreshFinished')
