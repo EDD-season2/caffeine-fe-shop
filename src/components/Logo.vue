@@ -1,11 +1,16 @@
 <template>
-<div class="my-3">
-    <h1 class="headline logo-title mt-3">
-      <router-link to="/" v-if="showHome">
-        <v-icon class="ic-home">mdi-home-outline</v-icon></router-link>
-        CAFFEINE
-    </h1>
-</div>
+<v-app-bar
+    class="mb-4"
+    flat
+    dark>
+        <v-btn
+            @click="moveHome"
+            icon
+            text>
+            <v-icon>mdi-home-outline</v-icon>
+        </v-btn>
+    <v-toolbar-title>CAFFEINE</v-toolbar-title>
+</v-app-bar>
 </template>
 
 <script lang="ts">
@@ -15,19 +20,22 @@ import { Prop } from 'vue-property-decorator'
 
 @Component
 export default class Logo extends Vue {
-  @Prop({ default: true }) private showHome?: boolean
+    @Prop({ default: true }) private showHome?: boolean
+
+    private moveHome () {
+        this.$router.push('/')
+    }
 }
 </script>
 
 <style lang="scss" scoped>
 div {
-  position: relative;
+    position: relative;
 }
 
-.ic-home {
-  position: absolute;
-  left: 16px;
-  top: 4px;
+.link {
+    margin: 0;
+    text-decoration: none;
 }
 
 .logo-title {
