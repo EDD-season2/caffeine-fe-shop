@@ -1,4 +1,6 @@
 export default class Shop {
+    public static readonly UNAUTHENTICATED = new Shop(-1, '로그인이 필요합니다', '', '', '');
+
     constructor (
         private _id: number,
         private _name: string,

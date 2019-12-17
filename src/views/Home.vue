@@ -70,6 +70,10 @@ export default class Home extends LoginNeededView {
     private async created () {
         this.currentShop
         .then(shop => {
+            if (shop === Shop.UNAUTHENTICATED) {
+                this.$router.push('/login')
+                return
+            }
             this.shop = shop
         })
         if (this.$route.query.notify === 'orderAccepted') {
@@ -86,6 +90,9 @@ export default class Home extends LoginNeededView {
     }
 
     private onTabSwitch (idx: number) {
+        if (this.$store.state.currentShop === Shop.UNAUTHENTICATED) {
+            return
+        }
         if (idx === 0) {
             this.$store.dispatch('refreshPending')
         }

@@ -10,7 +10,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        currentShop: null,
+        currentShop: Shop.UNAUTHENTICATED,
         orders: {
             pending: [],
             inProgress: [],
@@ -40,9 +40,10 @@ export default new Vuex.Store({
             context.commit('updateCurrentShop', res)
         },
         async refreshPending (context: any) {
-            if (context.state.currentShop === null) {
-                await context.dispatch('refreshCurrentShop')
+            if (!canRetrieveOrders(context)) {
+                return null
             }
+            await context.dispatch('refreshCurrentShop')
             const res = await new OrderApiFactory().create().findPendingOrders(context.state.currentShop.id)
             context.commit('updatePending', res)
         },
@@ -58,3 +59,7 @@ export default new Vuex.Store({
     modules: {
     }
 })
+
+function canRetrieveOrders (context: any) {
+    return context.state.currentShop !== Shop.UNAUTHENTICATED
+}
