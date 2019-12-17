@@ -1,26 +1,35 @@
 <template>
-<div>
-    <Logo :showHome="false"/>
-    <Subtitle :text="shop.name"/>
-    <h2 class="title registered-shops-header my-2 mt-4 ml-4">주문내역</h2>
-    <v-tabs
-        @change="onTabSwitch"
-        :centered="true"
-        :grow="true">
-        <v-tabs-slider></v-tabs-slider>
-        <v-tab>결제된 주문</v-tab>
-        <v-tab>처리중인 주문</v-tab>
-        <v-tab>처리된 주문</v-tab>
-        <v-tab-item>
-            <PendingOrderList :orders="pendingOrders" />
-        </v-tab-item>
-        <v-tab-item>
-            <OrderList :orders="inProgressOrders" class="mx-3"/>
-        </v-tab-item>
-        <v-tab-item>
-            <OrderList :orders="finishedOrders" class="mx-3"/>
-        </v-tab-item>
-    </v-tabs>
+<v-card>
+    <v-app-bar
+        tabs
+        flat
+        dark
+        shrink-on-scroll>
+        <v-toolbar-title>주문내역</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-btn icon>
+          <v-icon>mdi-dots-vertical</v-icon>
+        </v-btn>
+        <template v-slot:extension>
+            <v-tabs
+                @change="onTabSwitch"
+                :grow="true">
+                <v-tabs-slider></v-tabs-slider>
+                <v-tab>결제된 주문</v-tab>
+                <v-tab>처리중인 주문</v-tab>
+                <v-tab>처리된 주문</v-tab>
+                <v-tab-item>
+                    <PendingOrderList :orders="pendingOrders" />
+                </v-tab-item>
+                <v-tab-item>
+                    <OrderList :orders="inProgressOrders" class="mx-3"/>
+                </v-tab-item>
+                <v-tab-item>
+                    <OrderList :orders="finishedOrders" class="mx-3"/>
+                </v-tab-item>
+            </v-tabs>
+        </template>
+    </v-app-bar>
     <v-snackbar
         class="mx-3 mb-2"
         v-model="showSnackbar">
@@ -28,12 +37,11 @@
         <v-btn
           color="pink"
           text
-          @click="showSnackbar = false"
-        >
+          @click="showSnackbar = false">
           Close
         </v-btn>
     </v-snackbar>
-</div>
+</v-card>
 </template>
 
 <script lang="ts">
