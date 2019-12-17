@@ -23,6 +23,7 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 
 import RequestWrapper from './lib/RequestWrapper'
+import Shop from './model/Shop'
 
 @Component
 export default class App extends Vue {
@@ -37,7 +38,7 @@ export default class App extends Vue {
 
     private subscribe () {
         // TODO: change shop id later
-        if (!this.eventSource) {
+        if (!this.eventSource && this.$store.state.currentShop !== Shop.UNAUTHENTICATED) {
             this.eventSource = RequestWrapper.subscribe('/v1/subscribe/shops/110')
             this.eventSource.onmessage = (evt) => {
                 this.handleNotify(evt.data)

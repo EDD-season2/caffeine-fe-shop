@@ -5,7 +5,7 @@
                 <h1 class="logo-title">CAFFEINE</h1>
                 <h2>매장 로그인</h2>
                 <v-form
-                    @submit="handleLoginClick">
+                    @submit.prevent="handleLoginClick">
                     <v-card class="py-5 px-6 my-3 mx-3">
                         <v-text-field
                             class="mb-3"
@@ -42,7 +42,7 @@ export default class ShopLogin extends Vue {
     private password = ''
 
     private handleLoginClick () {
-        console.log(this.email, this.password)
+        // TODO: Should be changed to use User API call
         this.loading = true
         setTimeout(() => {
             this.$router.push('/')
