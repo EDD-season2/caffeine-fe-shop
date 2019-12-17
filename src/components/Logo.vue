@@ -11,7 +11,7 @@
         text>
         <v-icon>mdi-home-outline</v-icon>
     </v-btn>
-    <v-toolbar-title>주문내역</v-toolbar-title>
+    <v-toolbar-title>{{ title }}</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-menu
         offset-y
@@ -46,6 +46,7 @@ import { Prop } from 'vue-property-decorator'
 @Component
 export default class Logo extends Vue {
     @Prop({ default: true }) private showHome?: boolean
+    @Prop({ default: '' }) private title?: string
     private menus = [
         '정보 수정',
         '로그아웃'

@@ -1,6 +1,8 @@
 <template>
 <v-card>
-    <Logo :showHome="false">
+    <Logo
+        title="주문내역"
+        :showHome="false">
         <template v-slot:extension>
             <v-tabs
                 @change="onTabSwitch"
