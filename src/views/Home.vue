@@ -1,15 +1,6 @@
 <template>
 <v-card>
-    <v-app-bar
-        tabs
-        flat
-        dark
-        shrink-on-scroll>
-        <v-toolbar-title>주문내역</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
+    <Logo :showHome="false">
         <template v-slot:extension>
             <v-tabs
                 @change="onTabSwitch"
@@ -29,7 +20,7 @@
                 </v-tab-item>
             </v-tabs>
         </template>
-    </v-app-bar>
+    </Logo>
     <v-snackbar
         class="mx-3 mb-2"
         v-model="showSnackbar">
@@ -38,7 +29,7 @@
           color="pink"
           text
           @click="showSnackbar = false">
-          Close
+          닫기
         </v-btn>
     </v-snackbar>
 </v-card>
@@ -74,6 +65,8 @@ export default class Home extends LoginNeededView {
     private shopApi = new ShopApiFactory().create();
     private showSnackbar = false;
     private snackbarText = '';
+    private showMenu = false;
+    private menus = ['1', '2', '3'];
 
     private async created () {
         this.currentShop
