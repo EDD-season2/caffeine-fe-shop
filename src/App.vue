@@ -10,8 +10,7 @@
         <v-btn
           color="pink"
           text
-          @click="showSnackbar = false"
-        >
+          @click="showSnackbar = false">
           Close
         </v-btn>
     </v-snackbar>
