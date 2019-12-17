@@ -1,7 +1,6 @@
 <template>
 <div>
-    <Logo/>
-    <h2 class="title text-center">메뉴 등록</h2>
+    <Logo title="메뉴 등록"/>
     <v-form class="mx-5 py-3 registration-form" @submit="onSubmit" v-model="valid">
         <v-text-field v-model="menuItemName" class="input-shop-name my-2" label="메뉴 이름"/>
         <v-text-field v-model="menuItemDescription" class="input-shop-name my-2" label="설명"/>
@@ -45,7 +44,3 @@ export default class MenuRegister extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
