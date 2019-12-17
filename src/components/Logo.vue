@@ -3,7 +3,7 @@
     tabs
     flat
     dark
-    shrink-on-scroll>
+    prominent>
     <v-btn
         v-show="showHome"
         @click="moveHome"
@@ -67,16 +67,3 @@ export default class Logo extends Vue {
     }
 }
 </script>
-
-<style lang="scss" scoped>
-.link {
-    margin: 0;
-    text-decoration: none;
-}
-
-.logo-title {
-    color: #746060;
-    font-family: 'Segoe UI';
-    text-align: center
-}
-</style>
