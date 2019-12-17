@@ -33,6 +33,9 @@ export default class App extends Vue {
     private eventSource?: EventSource;
 
     private created () {
+        this.$store.subscribe((mutation, state) => {
+           this.subscribe()
+        })
         this.subscribe()
     }
 
