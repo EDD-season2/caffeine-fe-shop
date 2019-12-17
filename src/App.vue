@@ -37,8 +37,8 @@ export default class App extends Vue {
     }
 
     private subscribe () {
-        // TODO: change shop id later
-        if (!this.eventSource && this.$store.state.currentShop !== Shop.UNAUTHENTICATED) {
+        if (this.canSubscribe()) {
+            // TODO: change shop id later
             this.eventSource = RequestWrapper.subscribe('/v1/subscribe/shops/110')
             this.eventSource.onmessage = (evt) => {
                 this.handleNotify(evt.data)
@@ -55,6 +55,10 @@ export default class App extends Vue {
             this.snackbarText = message
             this.showSnackbar = true
         }
+    }
+
+    private canSubscribe () {
+        return !this.eventSource && this.$store.state.currentShop !== Shop.UNAUTHENTICATED
     }
 }
 </script>
