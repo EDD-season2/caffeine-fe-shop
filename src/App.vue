@@ -41,7 +41,7 @@ export default class App extends Vue {
     private subscribe () {
         if (this.canSubscribe()) {
             // TODO: change shop id later
-            this.eventSource = RequestWrapper.subscribe('/v1/subscribe/shops/110')
+            this.eventSource = RequestWrapper.subscribe(`/v1/subscribe/shops/${this.$store.state.currentShop.id}`)
             this.eventSource.onmessage = (evt) => {
                 this.handleNotify(evt.data)
                 this.$store.dispatch('refreshPending')
