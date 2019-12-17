@@ -21,7 +21,7 @@ const routes = [
     component: () => import('../views/ShopLogin.vue')
   },
   {
-    path: '/shop/:shopId',
+    path: '/info',
     name: 'shopInfo',
     component: () => import('../views/ShopInfo.vue')
   },
