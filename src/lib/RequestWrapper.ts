@@ -1,10 +1,13 @@
-import Axios from 'axios'
+import Axios, { AxiosRequestConfig } from 'axios'
 
 export default class RequestWrapper {
     private static readonly BASE_URL = '/api';
 
-    private static validateStatus (status: number) {
-        return status < 500
+    private static config: AxiosRequestConfig = {
+        validateStatus: (status: number) => {
+            return status < 500
+        },
+        withCredentials: true
     }
 
     public static subscribe (url: string) {
@@ -12,20 +15,14 @@ export default class RequestWrapper {
     }
 
     public static async get (url: string) {
-        return Axios.get(`${RequestWrapper.BASE_URL}${url}`, {
-            validateStatus: RequestWrapper.validateStatus
-        })
+        return Axios.get(`${RequestWrapper.BASE_URL}${url}`, RequestWrapper.config)
     }
 
     public static async post (url: string, body: any) {
-        return Axios.post(`${RequestWrapper.BASE_URL}${url}`, body, {
-            validateStatus: RequestWrapper.validateStatus
-        })
+        return Axios.post(`${RequestWrapper.BASE_URL}${url}`, body, RequestWrapper.config)
     }
 
     public static async put (url: string, body: any) {
-        return Axios.put(`${RequestWrapper.BASE_URL}${url}`, body, {
-            validateStatus: RequestWrapper.validateStatus
-        })
+        return Axios.put(`${RequestWrapper.BASE_URL}${url}`, body, RequestWrapper.config)
     }
 }
