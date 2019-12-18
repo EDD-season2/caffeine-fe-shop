@@ -126,7 +126,8 @@ export default class OrderDetail extends Vue {
             }
         })
         this.showAcceptDialog = false
-        this.$router.push('/?notify=orderAccepted')
+        this.$store.dispatch('receiveNotification', '주문을 접수했습니다')
+        this.$router.push('/')
     }
 
     private onRejectClick () {
@@ -134,8 +135,11 @@ export default class OrderDetail extends Vue {
     }
 
     private onRejectDialogResolve () {
+        new OrderApiFactory().create().rejectOrder(this.$store.state.currentShop.id, this.order.id)
         this.showRejectDialog = false
-        this.$router.push('/?notify=orderRejected')
+        this.$store.dispatch('receiveNotification', '주문을 거절했습니다.')
+        this.$store.dispatch('refreshPending')
+        this.$router.push('/')
     }
 
     private onRejectReasonChange () {
@@ -150,11 +154,13 @@ export default class OrderDetail extends Vue {
         new OrderApiFactory().create().finishOrder(this.$store.state.currentShop.id, this.order.id)
         .then(status => {
             if (status === 200) {
+                this.$store.dispatch('refreshInProgress')
                 this.$store.dispatch('refreshFinished')
             }
         })
         this.showFinishDialog = false
-        this.$router.push('/?notify=orderFinished')
+        this.$store.dispatch('receiveNotification', '주문을 완료했습니다')
+        this.$router.push('/')
     }
 }
 </script>
