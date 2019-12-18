@@ -11,7 +11,7 @@ export default class OwnerHttpApi implements OwnerApi {
     }
 
     public async login (email: string, password: string) {
-        const res = await RequestWrapper.post('/v1/onwers/login', { email, password })
+        const res = await RequestWrapper.post('/v1/owners/login', { email, password })
         if (res.status === 200) {
             return 'ok'
         }
