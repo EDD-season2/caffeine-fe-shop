@@ -34,6 +34,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { OwnerApiFactory } from '../lib/OwnerApi'
 
 @Component
 export default class ShopLogin extends Vue {
@@ -42,11 +43,22 @@ export default class ShopLogin extends Vue {
     private password = ''
 
     private handleLoginClick () {
-        // TODO: Should be changed to use User API call
         this.loading = true
-        setTimeout(() => {
-            this.$router.push('/')
-        }, 1000)
+        OwnerApiFactory.create().login(this.email, this.password)
+        .then((message) => {
+            this.clearInput()
+            if (message === 'ok') {
+               this.$router.push('/')
+               return
+            }
+            this.loading = false
+            this.$store.dispatch('receiveNotification', message)
+        })
+    }
+
+    private clearInput () {
+        this.email = ''
+        this.password = ''
     }
 }
 </script>

@@ -1,39 +1,29 @@
 <template>
-<div>
-    <Logo :showHome="false"/>
-    <Subtitle :text="shop.name"/>
-    <h2 class="title registered-shops-header my-2 mt-4 ml-4">주문내역</h2>
-    <v-tabs
-        @change="onTabSwitch"
-        :centered="true"
-        :grow="true">
-        <v-tabs-slider></v-tabs-slider>
-        <v-tab>결제된 주문</v-tab>
-        <v-tab>처리중인 주문</v-tab>
-        <v-tab>처리된 주문</v-tab>
-        <v-tab-item>
-            <PendingOrderList :orders="pendingOrders" />
-        </v-tab-item>
-        <v-tab-item>
-            <OrderList :orders="inProgressOrders" class="mx-3"/>
-        </v-tab-item>
-        <v-tab-item>
-            <OrderList :orders="finishedOrders" class="mx-3"/>
-        </v-tab-item>
-    </v-tabs>
-    <v-snackbar
-        class="mx-3 mb-2"
-        v-model="showSnackbar">
-        {{ snackbarText }}
-        <v-btn
-          color="pink"
-          text
-          @click="showSnackbar = false"
-        >
-          Close
-        </v-btn>
-    </v-snackbar>
-</div>
+<v-card>
+    <Logo
+        title="주문내역"
+        :showHome="false">
+        <template v-slot:extension>
+            <v-tabs
+                @change="onTabSwitch"
+                :grow="true">
+                <v-tabs-slider></v-tabs-slider>
+                <v-tab>결제된 주문</v-tab>
+                <v-tab>처리중인 주문</v-tab>
+                <v-tab>처리된 주문</v-tab>
+                <v-tab-item>
+                    <PendingOrderList :orders="pendingOrders" />
+                </v-tab-item>
+                <v-tab-item>
+                    <OrderList :orders="inProgressOrders" class="mx-3"/>
+                </v-tab-item>
+                <v-tab-item>
+                    <OrderList :orders="finishedOrders" class="mx-3"/>
+                </v-tab-item>
+            </v-tabs>
+        </template>
+    </Logo>
+</v-card>
 </template>
 
 <script lang="ts">
@@ -64,10 +54,9 @@ import LoginNeededView from './LoginNeededView'
 export default class Home extends LoginNeededView {
     private shop: Shop = new Shop(0, '', '', '', '');
     private shopApi = new ShopApiFactory().create();
-    private showSnackbar = false;
-    private snackbarText = '';
 
     private async created () {
+        this.ensureSignedIn()
         this.currentShop
         .then(shop => {
             if (shop === Shop.UNAUTHENTICATED) {
@@ -76,17 +65,6 @@ export default class Home extends LoginNeededView {
             }
             this.shop = shop
         })
-        if (this.$route.query.notify === 'orderAccepted') {
-            this.$emit('notify', '주문을 접수했습니다.')
-        }
-
-        if (this.$route.query.notify === 'orderRejected') {
-            this.$emit('notify', '주문을 거절했습니다.')
-        }
-
-        if (this.$route.query.notify === 'orderFinished') {
-            this.$emit('notify', '주문을 완료했습니다.')
-        }
     }
 
     private onTabSwitch (idx: number) {

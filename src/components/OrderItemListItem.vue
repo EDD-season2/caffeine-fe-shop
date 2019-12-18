@@ -1,11 +1,13 @@
 <template>
-<div>
-    <v-row class="justify-space-around py-2 px-3">
+<v-list-item>
+    <v-list-item-content>
         <span class="subtitle-1">{{ orderItem.name }}</span>
-        <span>수량 {{ 1 }}</span>
-    </v-row>
-    <v-divider class="my-3"/>
-</div>
+    </v-list-item-content>
+    <!-- <v-row class="justify-space-around py-2 px-3">
+        <span class="subtitle-1">{{ orderItem.name }}</span>
+    </v-row> -->
+    <!-- <v-divider class="my-3"/> -->
+</v-list-item>
 </template>
 
 <script lang="ts">

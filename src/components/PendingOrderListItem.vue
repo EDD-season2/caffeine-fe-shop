@@ -1,5 +1,5 @@
 <template>
-<router-link :to="`/order/${orderId}`" class="d-block py-3">
+<router-link :to="`/order/${orderId}`" class="d-block py-3 item">
     <v-list-item>
         <v-list-item-content>
             <v-list-item-title>
@@ -21,3 +21,9 @@ export default class PendigOrderListItem extends Vue {
     @Prop() private orderId!: number;
 }
 </script>
+
+<style lang="scss" scoped>
+.item {
+    text-decoration: none;
+}
+</style>

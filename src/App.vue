@@ -10,8 +10,7 @@
         <v-btn
           color="pink"
           text
-          @click="showSnackbar = false"
-        >
+          @click="showSnackbar = false">
           Close
         </v-btn>
     </v-snackbar>
@@ -24,6 +23,7 @@ import Component from 'vue-class-component'
 
 import RequestWrapper from './lib/RequestWrapper'
 import Shop from './model/Shop'
+import { State } from './store'
 
 @Component
 export default class App extends Vue {
@@ -33,13 +33,19 @@ export default class App extends Vue {
     private eventSource?: EventSource;
 
     private created () {
+        this.$store.subscribe((mutation, state: State) => {
+            this.subscribe()
+            if (mutation.type === 'addNotification') {
+                this.showSnackbar = true
+                this.snackbarText = state.notifications[state.notifications.length - 1]
+            }
+        })
         this.subscribe()
     }
 
     private subscribe () {
         if (this.canSubscribe()) {
-            // TODO: change shop id later
-            this.eventSource = RequestWrapper.subscribe('/v1/subscribe/shops/110')
+            this.eventSource = RequestWrapper.subscribe(`/v1/subscribe/shops/${this.$store.state.currentShop.id}`)
             this.eventSource.onmessage = (evt) => {
                 this.handleNotify(evt.data)
                 this.$store.dispatch('refreshPending')
@@ -52,8 +58,7 @@ export default class App extends Vue {
 
     private handleNotify (message: string) {
         if (message !== 'ok') {
-            this.snackbarText = message
-            this.showSnackbar = true
+            this.$store.dispatch('receiveNotification', message)
         }
     }
 

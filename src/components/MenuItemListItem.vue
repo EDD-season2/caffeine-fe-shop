@@ -27,4 +27,8 @@ export default class MenuItemListItem extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.link {
+    text-decoration: none;
+    color: black;
+}
 </style>

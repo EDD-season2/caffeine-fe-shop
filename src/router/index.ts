@@ -21,13 +21,18 @@ const routes = [
     component: () => import('../views/ShopLogin.vue')
   },
   {
-    path: '/shop/:shopId',
+    path: '/info',
     name: 'shopInfo',
     component: () => import('../views/ShopInfo.vue')
   },
   {
     path: '/shop/:shopId/menu-register',
     name: 'menuRegister',
+    component: () => import('../views/MenuRegister.vue')
+  },
+  {
+    path: '/menu/edit/:id',
+    name: 'menuEdit',
     component: () => import('../views/MenuRegister.vue')
   },
   {

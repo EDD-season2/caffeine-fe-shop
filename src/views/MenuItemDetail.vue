@@ -1,9 +1,26 @@
 <template>
 <div>
-    <Logo/>
-    {{ menuItemName }}
-    {{ menuItemDescription }}
-    {{ menuItemPrice }}
+    <Logo
+        title="메뉴 상세">
+        <template v-slot:extension>
+            <v-btn
+                @click="onEditClick"
+                fab
+                absolute
+                right
+                bottom>
+                <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+        </template>
+    </Logo>
+    <v-sheet class="px-3 py-3">
+        <v-subheader>메뉴명</v-subheader>
+        <v-card-text class="title ml-3">{{ menuItem.name }}</v-card-text>
+        <v-subheader>설명</v-subheader>
+        <v-card-text class="title ml-3">{{ menuItem.description }}</v-card-text>
+        <v-subheader>가격</v-subheader>
+        <v-card-text class="title ml-3">{{ menuItem.price }}</v-card-text>
+    </v-sheet>
 </div>
 </template>
 
@@ -23,22 +40,18 @@ import { MenuItemApiFactory } from '../lib/MenuItemApi'
     }
 })
 export default class MenuItemDetail extends Vue {
-    private menuItemId = -1
-    private menuItemName = ''
-    private menuItemDescription = ''
-    private menuItemPrice = 0
+    private menuItem = MenuItem.INVALID;
 
-    private beforeMount () {
-        this.menuItemId = Number(this.$route.params.menuItemId)
-        new MenuItemApiFactory().create().findById(this.menuItemId)
+    private created () {
+        const menuItemId = Number(this.$route.params.menuItemId)
+        new MenuItemApiFactory().create().findById(menuItemId)
         .then(menuItem => {
-            this.menuItemName = menuItem.name
-            this.menuItemDescription = menuItem.description
-            this.menuItemPrice = menuItem.price
+            this.menuItem = menuItem
         })
+    }
+
+    private onEditClick () {
+        this.$router.push(`/menu/edit/${this.menuItem.id}`)
     }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>
