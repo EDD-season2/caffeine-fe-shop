@@ -43,6 +43,8 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Prop } from 'vue-property-decorator'
 
+import { OwnerApiFactory } from '@/lib/OwnerApi'
+
 @Component
 export default class Logo extends Vue {
     @Prop({ default: true }) private showHome?: boolean
@@ -58,11 +60,20 @@ export default class Logo extends Vue {
 
     private onMenuClick (index: number) {
         if (index === 0) {
-            // TODO: move to edit page
+            this.$router.push('/info')
             return
         }
         if (index === 1) {
-            // TODO: logout
+            OwnerApiFactory.create().logout()
+            .then(message => {
+                if (status === 'ok') {
+                    this.$store.dispatch('receiveNotification', '로그아웃됐습니다')
+                    this.$router.push('/login')
+                    return
+                }
+                this.$store.dispatch('receiveNotification', '로그아웃에 실패했습니다')
+                this.$router.push('/login')
+            })
         }
     }
 }
