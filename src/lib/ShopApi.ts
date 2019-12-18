@@ -2,8 +2,6 @@ import ShopHttpApi from './ShopHttpApi'
 import Shop from '@/model/Shop'
 
 export interface ShopApi {
-    // Returns location of shop entity resource
-    retrieveCurrentShop(): Promise<Shop>
     createShop(name: string): Promise<string>
     findAllShops(): Promise<Shop[]>
     findById(id: number): Promise<Shop>
