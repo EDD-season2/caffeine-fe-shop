@@ -19,19 +19,21 @@ import Component from 'vue-class-component'
 import Logo from '@/components/Logo.vue'
 import { MenuItemApiFactory } from '../lib/MenuItemApi'
 import MenuItem from '../model/MenuItem'
+import LoginNeededView from './LoginNeededView'
 
 @Component({
     components: {
         Logo
     }
 })
-export default class MenuRegister extends Vue {
+export default class MenuRegister extends LoginNeededView {
     private menuItem = MenuItem.INVALID
     private menuItemName: string = ''
     private menuItemDescription: string = ''
     private menuItemPrice: string = ''
 
-    private created () {
+    private async created () {
+        this.ensureSignedIn()
         this.setModel()
     }
 

@@ -79,9 +79,9 @@ export default class Register extends Vue {
             return this.$store.dispatch('receiveNotification', message)
         })
         .then((message: string) => {
-            if (!message) return
+            if (!message) Promise.resolve()
             if (message === 'ok') {
-                return this.$router.push('/')
+                this.$router.push('/')
             }
         })
     }

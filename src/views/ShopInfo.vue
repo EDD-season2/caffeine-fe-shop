@@ -44,6 +44,7 @@ export default class ShopInfo extends LoginNeededView {
     private menuItems: MenuItem[] = []
 
     private created () {
+        this.ensureSignedIn()
         const menuItemApi = new MenuItemApiFactory().create()
         this.currentShop
         .then((shop) => {

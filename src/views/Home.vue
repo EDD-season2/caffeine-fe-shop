@@ -56,6 +56,7 @@ export default class Home extends LoginNeededView {
     private shopApi = new ShopApiFactory().create();
 
     private async created () {
+        this.ensureSignedIn()
         this.currentShop
         .then(shop => {
             if (shop === Shop.UNAUTHENTICATED) {
