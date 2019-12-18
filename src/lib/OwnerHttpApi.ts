@@ -1,7 +1,16 @@
 import OwnerApi, { SignupRequest } from './OwnerApi'
 import RequestWrapper from './RequestWrapper'
+import Owner from '@/model/Owner'
 
 export default class OwnerHttpApi implements OwnerApi {
+    public async retrieveCurrentOwner () {
+        const res = await RequestWrapper.get('/v1/owners/me')
+        if (res.status === 200) {
+            return Owner.from(res.data)
+        }
+        return Owner.UNAUTHENTICATED
+    }
+
     public async signup (signRequest: SignupRequest) {
         const res = await RequestWrapper.post('/v1/owners', signRequest.toJson())
         if (res.status === 201) {
