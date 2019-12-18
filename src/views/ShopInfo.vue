@@ -43,18 +43,11 @@ export default class ShopInfo extends LoginNeededView {
     private shopName: string = ''
     private menuItems: MenuItem[] = []
 
-    private created () {
-        this.ensureSignedIn()
+    private async created () {
+        await this.ensureSignedIn()
         const menuItemApi = new MenuItemApiFactory().create()
-        this.currentShop
-        .then((shop) => {
-            this.shop = shop
-            return menuItemApi.findByShopId(shop.id)
-        })
-        .then(menus => {
-            this.menuItems.splice(this.menuItems.length)
-            menus.forEach(v => this.menuItems.push(v))
-        })
+        this.menuItems = await menuItemApi.findByShopId(this.$store.state.currentShop.id)
+        this.shop = this.$store.state.currentShop
     }
 
     private onRegisterMenuClick () {
