@@ -31,6 +31,11 @@ const routes = [
     component: () => import('../views/MenuRegister.vue')
   },
   {
+    path: '/menu/edit/:id',
+    name: 'menuEdit',
+    component: () => import('../views/MenuRegister.vue')
+  },
+  {
     path: '/shop/:shopId/menu/:menuItemId',
     name: 'menuInfo',
     component: () => import('../views/MenuItemDetail.vue')

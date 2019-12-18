@@ -70,17 +70,18 @@ export default class Register extends Vue {
                 this.address
             )
         )
-        .then((message) => {
-            console.log(message)
+        .then((message: string) => {
+            if (!message) return
             if (message === 'ok') {
                 return ownerApi.login(this.email, this.password)
             }
             this.loading = false
-            this.$store.dispatch('receiveNotification', message)
+            return this.$store.dispatch('receiveNotification', message)
         })
-        .then((message) => {
+        .then((message: string) => {
+            if (!message) return
             if (message === 'ok') {
-                this.$router.push('/')
+                return this.$router.push('/')
             }
         })
     }
