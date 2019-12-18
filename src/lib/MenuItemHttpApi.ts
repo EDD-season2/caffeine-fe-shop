@@ -27,4 +27,17 @@ export default class MenuItemHttpApi implements MenuItemApi {
         const res = await RequestWrapper.get(`/v1/shops/${shopId}/menus`)
         return res.data.map((v: any) => MenuItem.from(v))
     }
+
+    public async updateById (menu: MenuItem) {
+        const res = await RequestWrapper.put(`/v1/menus/${menu.id}`, {
+            name: menu.name,
+            nameInEnglish: menu.nameInEnglish,
+            description: menu.description,
+            price: menu.price,
+            imgUrl: menu.imgUrl,
+            category: menu.category
+        })
+
+        return MenuItem.from(res.data)
+    }
 }
