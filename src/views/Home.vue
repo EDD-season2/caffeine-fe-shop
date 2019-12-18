@@ -57,14 +57,6 @@ export default class Home extends LoginNeededView {
 
     private async created () {
         this.ensureSignedIn()
-        this.currentShop
-        .then(shop => {
-            if (shop === Shop.UNAUTHENTICATED) {
-                this.$router.push('/login')
-                return
-            }
-            this.shop = shop
-        })
     }
 
     private onTabSwitch (idx: number) {
