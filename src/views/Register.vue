@@ -1,11 +1,38 @@
 <template>
 <div>
-    <Logo/>
-    <Subtitle text="매장 등록" />
-    <v-form class="mx-5 py-3 registration-form" @submit="onRegisterClick" v-model="valid">
-        <v-text-field v-model="shopName" class="input-shop-name my-2" label="매장명"/>
-        <v-btn type="submit" elevation="0" color="primary" class="mt-3">완료</v-btn>
+    <Logo
+        title="매장 등록"/>
+    <v-card class="mx-3 my-3">
+    <v-form class="mx-5 py-3 registration-form"
+        @submit.prevent="onRegisterClick">
+        <v-text-field
+            v-model="email"
+            class="input-shop-name my-2"
+            label="이메일"
+            type="email"/>
+        <v-text-field
+            v-model="password"
+            class="input-shop-name my-2"
+            label="비밀번호"
+            type="password"/>
+        <v-text-field
+            v-model="shopName"
+            class="input-shop-name my-2"
+            label="매장명"
+            type="text"/>
+        <v-text-field
+            v-model="address"
+            class="input-shop-name my-2"
+            label="매장 주소"
+            type="text"/>
+        <v-btn
+            type="submit"
+            elevation="0"
+            color="primary"
+            class="mt-3"
+            :loading="loading">완료</v-btn>
     </v-form>
+    </v-card>
 </div>
 </template>
 
@@ -17,22 +44,45 @@ import Logo from '@/components/Logo.vue'
 import Subtitle from '@/components/Subtitle.vue'
 
 import { ShopApiFactory } from '../lib/ShopApi'
+import { OwnerApiFactory, SignupRequest } from '../lib/OwnerApi'
+import Owner from '../model/Owner'
 
 @Component({
     components: {
-        Logo,
-        Subtitle
+        Logo
     }
 })
 export default class Register extends Vue {
+    private email = '';
+    private password = '';
     private shopName = '';
-    private valid = false;
+    private address = '';
+    private loading = false;
 
     private onRegisterClick () {
-        const { shopName } = this
-        this.shopName = ''
-        new ShopApiFactory().create().createShop(shopName)
-        .then(location => { this.$router.push('/') })
+        this.loading = true
+        const ownerApi = OwnerApiFactory.create()
+        ownerApi.signup(
+            new SignupRequest(
+                this.email,
+                this.password,
+                this.shopName,
+                this.address
+            )
+        )
+        .then((message) => {
+            console.log(message)
+            if (message === 'ok') {
+                return ownerApi.login(this.email, this.password)
+            }
+            this.loading = false
+            this.$store.dispatch('receiveNotification', message)
+        })
+        .then((message) => {
+            if (message === 'ok') {
+                this.$router.push('/')
+            }
+        })
     }
 }
 </script>
