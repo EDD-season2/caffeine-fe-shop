@@ -23,17 +23,6 @@
             </v-tabs>
         </template>
     </Logo>
-    <v-snackbar
-        class="mx-3 mb-2"
-        v-model="showSnackbar">
-        {{ snackbarText }}
-        <v-btn
-          color="pink"
-          text
-          @click="showSnackbar = false">
-          닫기
-        </v-btn>
-    </v-snackbar>
 </v-card>
 </template>
 
@@ -65,10 +54,6 @@ import LoginNeededView from './LoginNeededView'
 export default class Home extends LoginNeededView {
     private shop: Shop = new Shop(0, '', '', '', '');
     private shopApi = new ShopApiFactory().create();
-    private showSnackbar = false;
-    private snackbarText = '';
-    private showMenu = false;
-    private menus = ['1', '2', '3'];
 
     private async created () {
         this.currentShop
@@ -79,17 +64,6 @@ export default class Home extends LoginNeededView {
             }
             this.shop = shop
         })
-        if (this.$route.query.notify === 'orderAccepted') {
-            this.$emit('notify', '주문을 접수했습니다.')
-        }
-
-        if (this.$route.query.notify === 'orderRejected') {
-            this.$emit('notify', '주문을 거절했습니다.')
-        }
-
-        if (this.$route.query.notify === 'orderFinished') {
-            this.$emit('notify', '주문을 완료했습니다.')
-        }
     }
 
     private onTabSwitch (idx: number) {
