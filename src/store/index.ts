@@ -64,10 +64,6 @@ export default new Vuex.Store({
             context.commit('updateCurrentOwner', res)
         },
         async refreshPending (context: ActionContext<State, State>) {
-            if (!canRetrieveOrders(context)) {
-                return null
-            }
-            await context.dispatch('refreshCurrentShop')
             const res = await new OrderApiFactory().create().findPendingOrders(context.state.currentShop.id)
             context.commit('updatePending', res)
         },
