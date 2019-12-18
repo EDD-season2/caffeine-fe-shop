@@ -136,9 +136,13 @@ export default class OrderDetail extends Vue {
 
     private onRejectDialogResolve () {
         new OrderApiFactory().create().rejectOrder(this.$store.state.currentShop.id, this.order.id)
+        .then(status => {
+            if (status === 200) {
+                this.$store.dispatch('refreshPending')
+            }
+        })
         this.showRejectDialog = false
         this.$store.dispatch('receiveNotification', '주문을 거절했습니다.')
-        this.$store.dispatch('refreshPending')
         this.$router.push('/')
     }
 
