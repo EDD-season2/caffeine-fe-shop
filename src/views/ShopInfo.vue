@@ -1,15 +1,19 @@
 <template>
-    <div>
-        <Logo/>
-        <h2 class="headline mt-3 text-center">{{ shopName }}</h2>
+    <div class="p-rel">
+        <Logo
+            title="매장 정보"/>
         <v-container>
-            <h3 class="title my-3">메뉴</h3>
-            <div class="mt-4">
-                <v-btn type="button" color="primary" class="mr-3" @click="onRegisterMenuClick">메뉴 추가</v-btn>
-                <v-btn type="button" color="secondary">메뉴 편집</v-btn>
-            </div>
+            <v-subheader>메뉴</v-subheader>
             <MenuItemList :menuItems="menuItems"/>
         </v-container>
+        <v-btn
+            @click="onRegisterMenuClick"
+            color="primary"
+            fixed
+            fab
+            right
+            bottom><v-icon>mdi-plus</v-icon>
+        </v-btn>
     </div>
 </template>
 
@@ -21,10 +25,12 @@ import { Prop } from 'vue-property-decorator'
 
 import Logo from '@/components/Logo.vue'
 import MenuItemList from '@/components/MenuItemList.vue'
+import LoginNeededView from './LoginNeededView'
 
 import { ShopApiFactory } from '../lib/ShopApi'
 import MenuItem from '../model/MenuItem'
 import { MenuItemApiFactory } from '../lib/MenuItemApi'
+import Shop from '@/model/Shop'
 
 @Component({
     components: {
@@ -32,26 +38,20 @@ import { MenuItemApiFactory } from '../lib/MenuItemApi'
         MenuItemList
     }
 })
-export default class ShopInfo extends Vue {
-    private shopId: number = 0
+export default class ShopInfo extends LoginNeededView {
+    private shop = Shop.UNAUTHENTICATED
     private shopName: string = ''
     private menuItems: MenuItem[] = []
 
-    private beforeMount () {
-        this.shopId = Number(this.$route.params.shopId)
-        const shopApi = new ShopApiFactory().create()
+    private async created () {
+        await this.ensureSignedIn()
         const menuItemApi = new MenuItemApiFactory().create()
-        shopApi.findById(this.shopId)
-        .then(res => { this.shopName = res.name })
-        .then(() => menuItemApi.findByShopId(this.shopId))
-        .then(menus => {
-            this.menuItems.splice(this.menuItems.length)
-            menus.forEach(v => this.menuItems.push(v))
-        })
+        this.menuItems = await menuItemApi.findByShopId(this.$store.state.currentShop.id)
+        this.shop = this.$store.state.currentShop
     }
 
     private onRegisterMenuClick () {
-        this.$router.push(`/shop/${this.shopId}/menu-register`)
+        this.$router.push(`/shop/${this.shop.id}/menu-register`)
     }
 }
 </script>

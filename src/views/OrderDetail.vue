@@ -1,19 +1,36 @@
 <template>
 <div>
-    <Logo />
-    <Subtitle text="주문 상세"/>
+    <Logo title="주문 상세"/>
     <h3 class="headline text-center my-3" v-if="order.state !== 'PENDING'">주문번호 {{ 1234 }}</h3>
 
+    <v-subheader>주문내역</v-subheader>
     <v-card flat class="py-3">
         <OrderItemListItem v-for="(item) in order.orderItems"
             v-bind:key="item.id" :orderItem="item"/>
     </v-card>
-    <v-row class="justify-space-around px-5 mx-5" v-if="isOrderPending">
-        <v-btn elevation="0" color="error" @click="onRejectClick">거절하기</v-btn>
-        <v-btn elevation="0" color="primary" @click="onAcceptClick">주문 접수</v-btn>
+    <v-row
+        class="button-group"
+        v-if="isOrderPending">
+        <v-btn
+            class="group-button button-half"
+            elevation="0"
+            color="accent"
+            @click="onRejectClick">거절하기</v-btn>
+        <v-btn
+            class="group-button button-half"
+            elevation="0"
+            color="primary"
+            @click="onAcceptClick">주문 접수</v-btn>
     </v-row>
-    <v-row class="justify-center px-5 mx-5" v-if="isOrderInProgress">
-        <v-btn elevation="0" color="primary" @click="onFinishClick">주문 완료</v-btn>
+    <v-row
+        class="button-group"
+        v-if="isOrderInProgress">
+        <v-btn
+            class="group-button"
+            elevation="0"
+            color="primary"
+            @click="onFinishClick"
+            block>주문 완료</v-btn>
     </v-row>
     <v-dialog v-model="showAcceptDialog">
         <v-card>
@@ -85,6 +102,7 @@ import Order from '../model/Order'
 import OrderItem from '../model/OrderItem'
 import { Prop } from 'vue-property-decorator'
 import MenuItem from '../model/MenuItem'
+import LoginNeededView from './LoginNeededView'
 
 @Component({
     components: {
@@ -93,7 +111,7 @@ import MenuItem from '../model/MenuItem'
         OrderItemListItem
     }
 })
-export default class OrderDetail extends Vue {
+export default class OrderDetail extends LoginNeededView {
     private order: Order = new Order(0, 'FINISHED', 0, []);
     private showAcceptDialog = false;
     private showRejectDialog = false;
@@ -101,9 +119,9 @@ export default class OrderDetail extends Vue {
     private showRejectReasonInput = false;
     private rejectReasonSelected = 0;
 
-    private async beforeMount () {
-        // TODO: Must be changed later
-        this.order = await new OrderApiFactory().create().findById(this.$store.state.currentShopId, Number(this.$route.params.orderId))
+    private async created () {
+        this.ensureSignedIn()
+        this.order = await new OrderApiFactory().create().findById(this.$store.state.currentShop.id, Number(this.$route.params.orderId))
     }
 
     private get isOrderPending () {
@@ -119,14 +137,15 @@ export default class OrderDetail extends Vue {
     }
 
     private onAcceptDialogResolve () {
-        new OrderApiFactory().create().acceptOrder(this.$store.state.currentShopId, this.order.id)
+        new OrderApiFactory().create().acceptOrder(this.$store.state.currentShop.id, this.order.id)
         .then(status => {
             if (status === 200) {
                 this.$store.dispatch('refreshPending')
             }
         })
         this.showAcceptDialog = false
-        this.$router.push('/?notify=orderAccepted')
+        this.$store.dispatch('receiveNotification', '주문을 접수했습니다')
+        this.$router.push('/')
     }
 
     private onRejectClick () {
@@ -134,8 +153,15 @@ export default class OrderDetail extends Vue {
     }
 
     private onRejectDialogResolve () {
+        new OrderApiFactory().create().rejectOrder(this.$store.state.currentShop.id, this.order.id)
+        .then(status => {
+            if (status === 200) {
+                this.$store.dispatch('refreshPending')
+            }
+        })
         this.showRejectDialog = false
-        this.$router.push('/?notify=orderRejected')
+        this.$store.dispatch('receiveNotification', '주문을 거절했습니다.')
+        this.$router.push('/')
     }
 
     private onRejectReasonChange () {
@@ -147,14 +173,34 @@ export default class OrderDetail extends Vue {
     }
 
     private onFinishDialogResolve () {
-        new OrderApiFactory().create().finishOrder(this.$store.state.currentShopId, this.order.id)
+        new OrderApiFactory().create().finishOrder(this.$store.state.currentShop.id, this.order.id)
         .then(status => {
             if (status === 200) {
+                this.$store.dispatch('refreshInProgress')
                 this.$store.dispatch('refreshFinished')
             }
         })
         this.showFinishDialog = false
-        this.$router.push('/?notify=orderFinished')
+        this.$store.dispatch('receiveNotification', '주문을 완료했습니다')
+        this.$router.push('/')
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.button-group {
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+}
+
+.button-half {
+    width: 50%;
+}
+
+.group-button {
+    border-radius: 0;
+    height: 42px !important;
+}
+</style>

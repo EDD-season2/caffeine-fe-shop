@@ -5,6 +5,7 @@ export interface MenuItemApi {
     findById(id: number): Promise<MenuItem>
     addMenu(name: string, desc: string, price: number, shopId: number): Promise<MenuItem>
     findByShopId(shopId: number): Promise<MenuItem[]>
+    updateById(menu: MenuItem): Promise<MenuItem>
 }
 
 export class MenuItemApiFactory {
