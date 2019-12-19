@@ -2,7 +2,8 @@
 <v-card>
     <Logo
         title="주문내역"
-        :showHome="false">
+        :showHome="false"
+        absolute>
         <template v-slot:extension>
             <v-tabs
                 @change="onTabSwitch"
@@ -57,14 +58,6 @@ export default class Home extends LoginNeededView {
 
     private async created () {
         this.ensureSignedIn()
-        this.currentShop
-        .then(shop => {
-            if (shop === Shop.UNAUTHENTICATED) {
-                this.$router.push('/login')
-                return
-            }
-            this.shop = shop
-        })
     }
 
     private onTabSwitch (idx: number) {

@@ -17,9 +17,9 @@ export default class MenuItemHttpApi implements MenuItemApi {
             price,
             imgUrl: '',
             category: '',
-            shopId: shopId
+            vendor: shopId
         })
-        const createdRes = await RequestWrapper.get(res.headers.Location)
+        const createdRes = await RequestWrapper.get(res.headers.location)
         return MenuItem.from(createdRes)
     }
 

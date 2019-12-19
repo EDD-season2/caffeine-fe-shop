@@ -24,6 +24,7 @@ import Component from 'vue-class-component'
 import RequestWrapper from './lib/RequestWrapper'
 import Shop from './model/Shop'
 import { State } from './store'
+import Owner from './model/Owner'
 
 @Component
 export default class App extends Vue {
@@ -63,7 +64,7 @@ export default class App extends Vue {
     }
 
     private canSubscribe () {
-        return !this.eventSource && this.$store.state.currentShop !== Shop.UNAUTHENTICATED
+        return !this.eventSource && this.$store.state.currentOwner !== Owner.UNAUTHENTICATED
     }
 }
 </script>

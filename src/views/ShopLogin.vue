@@ -35,6 +35,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { OwnerApiFactory } from '../lib/OwnerApi'
+import Owner from '../model/Owner'
 
 @Component
 export default class ShopLogin extends Vue {
@@ -42,14 +43,23 @@ export default class ShopLogin extends Vue {
     private email = ''
     private password = ''
 
+    private async created () {
+        await this.$store.dispatch('refreshCurrentOwner')
+        if (this.$store.state.currentOwner !== Owner.UNAUTHENTICATED) {
+            this.$router.push('/')
+        }
+    }
+
     private handleLoginClick () {
         this.loading = true
-        OwnerApiFactory.create().login(this.email, this.password)
-        .then((message) => {
+        const ownerApi = OwnerApiFactory.create()
+        ownerApi.login(this.email, this.password)
+        .then(async (message) => {
             this.clearInput()
             if (message === 'ok') {
-               this.$router.push('/')
-               return
+                await this.$store.dispatch('refreshCurrentOwner')
+                this.$router.push('/')
+                return
             }
             this.loading = false
             this.$store.dispatch('receiveNotification', message)

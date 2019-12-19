@@ -1,6 +1,8 @@
 import OwnerHttpApi from './OwnerHttpApi'
+import Owner from '@/model/Owner'
 
 export default interface OwnerApi {
+    retrieveCurrentOwner(): Promise<Owner>
     signup(request: SignupRequest): Promise<string>
     login(email: string, password: string): Promise<string>
     logout(): Promise<string>

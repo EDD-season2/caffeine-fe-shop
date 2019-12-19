@@ -3,7 +3,8 @@
     tabs
     flat
     dark
-    prominent>
+    prominent
+    :absolute="absolute">
     <v-btn
         v-show="showHome"
         @click="moveHome"
@@ -47,6 +48,7 @@ import { OwnerApiFactory } from '@/lib/OwnerApi'
 
 @Component
 export default class Logo extends Vue {
+    @Prop({ default: false }) private absolute?: boolean
     @Prop({ default: true }) private showHome?: boolean
     @Prop({ default: '' }) private title?: string
     private menus = [
@@ -66,7 +68,7 @@ export default class Logo extends Vue {
         if (index === 1) {
             OwnerApiFactory.create().logout()
             .then(message => {
-                if (status === 'ok') {
+                if (message === 'ok') {
                     this.$store.dispatch('receiveNotification', '로그아웃됐습니다')
                     this.$router.push('/login')
                     return

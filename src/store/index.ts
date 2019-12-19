@@ -1,14 +1,16 @@
 import Vue from 'vue'
-import Vuex, { ActionContext, Store } from 'vuex'
+import Vuex, { ActionContext } from 'vuex'
 
 import { OrderApiFactory } from '@/lib/OrderApi'
 import Order from '@/model/Order'
 import Shop from '@/model/Shop'
-import { ShopApiFactory } from '@/lib/ShopApi'
+import Owner from '@/model/Owner'
+import { OwnerApiFactory } from '@/lib/OwnerApi'
 
 Vue.use(Vuex)
 
 export interface State {
+    currentOwner: Owner,
     currentShop: Shop,
     notifications: string[],
     orders: {
@@ -20,6 +22,7 @@ export interface State {
 
 export default new Vuex.Store({
     state: {
+        currentOwner: Owner.UNAUTHENTICATED,
         currentShop: Shop.UNAUTHENTICATED,
         notifications: [],
         orders: {
@@ -29,8 +32,12 @@ export default new Vuex.Store({
             }
     },
     mutations: {
-        updateCurrentShop: (state: State, shop: Shop) => {
-            state.currentShop = shop
+        updateCurrentOwner: (state: State, owner: Owner) => {
+            state.currentOwner = owner
+            state.currentShop = owner.shops[0]
+        },
+        selectShop: (state: State, index: number) => {
+            state.currentShop = state.currentOwner.shops[index]
         },
         updatePending: (state: State, orders: Order[]) => {
             state.orders.pending.splice(0, state.orders.pending.length)
@@ -52,15 +59,11 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        async refreshCurrentShop (context: ActionContext<State, State>) {
-            const res = await new ShopApiFactory().create().retrieveCurrentShop()
-            context.commit('updateCurrentShop', res)
+        async refreshCurrentOwner (context: ActionContext<State, State>) {
+            const res = await OwnerApiFactory.create().retrieveCurrentOwner()
+            context.commit('updateCurrentOwner', res)
         },
         async refreshPending (context: ActionContext<State, State>) {
-            if (!canRetrieveOrders(context)) {
-                return null
-            }
-            await context.dispatch('refreshCurrentShop')
             const res = await new OrderApiFactory().create().findPendingOrders(context.state.currentShop.id)
             context.commit('updatePending', res)
         },
@@ -80,6 +83,6 @@ export default new Vuex.Store({
     }
 })
 
-function canRetrieveOrders (context: any) {
-    return context.state.currentShop !== Shop.UNAUTHENTICATED
+function canRetrieveOrders (context: ActionContext<State, State>) {
+    return context.state.currentOwner !== Owner.UNAUTHENTICATED
 }
