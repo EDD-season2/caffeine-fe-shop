@@ -25,11 +25,19 @@ const messaging = firebase.messaging()
 messaging.usePublicVapidKey('BM1MU-VZ4F2iFFsMoxHKfxm35FTOFVWLSTUTJXtZ4Z-17m66Cdcwsn6jJ7sknIYeQS-OLMCavC_AJUjVMKpFLMw')
 Notification.requestPermission()
 .then((permission) => {
+  console.log('permission ', permission)
   if (permission !== 'granted') {
     alert('알림을 허용해주세요')
   }
 })
-console.log(messaging.getToken())
+
+messaging.getToken()
+.then(t => console.log(t))
+
+messaging.onMessage((payload) => {
+  console.log(payload)
+  alert(payload)
+})
 
 Vue.config.productionTip = false
 

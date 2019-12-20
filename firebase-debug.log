@@ -1,0 +1,29 @@
+[debug] [2019-12-20T07:24:43.848Z] ----------------------------------------------------------------------
+[debug] [2019-12-20T07:24:43.851Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Jinwoo\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve
+[debug] [2019-12-20T07:24:43.851Z] CLI Version:   7.11.0
+[debug] [2019-12-20T07:24:43.852Z] Platform:      win32
+[debug] [2019-12-20T07:24:43.852Z] Node Version:  v10.16.0
+[debug] [2019-12-20T07:24:43.856Z] Time:          Fri Dec 20 2019 16:24:43 GMT+0900 (GMT+09:00)
+[debug] [2019-12-20T07:24:43.856Z] ----------------------------------------------------------------------
+[debug] [2019-12-20T07:24:43.856Z] 
+[debug] [2019-12-20T07:24:43.871Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-12-20T07:24:43.872Z] > authorizing via signed-in user
+[debug] [2019-12-20T07:24:43.872Z] [iam] checking project caffeine-fe-shop for permissions ["firebase.projects.get"]
+[debug] [2019-12-20T07:24:43.874Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-12-20T07:24:43.874Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-12-20T07:24:44.189Z] <<< HTTP RESPONSE 200
+[debug] [2019-12-20T07:24:44.196Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/caffeine-fe-shop:testIamPermissions  
+
+[debug] [2019-12-20T07:24:44.586Z] <<< HTTP RESPONSE 200
+[debug] [2019-12-20T07:24:44.587Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/caffeine-fe-shop  
+ 
+[debug] [2019-12-20T07:24:45.467Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\Jinwoo\Documents\GitHub\caffeine-fe-shop'...
+[info] 
+[debug] [2019-12-20T07:24:45.493Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/caffeine-fe-shop/webApps/-/config  
+ 
+[debug] [2019-12-20T07:24:46.862Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: dist
+[info] +  hosting: Local server: http://localhost:5000

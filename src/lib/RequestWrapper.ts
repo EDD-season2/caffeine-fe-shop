@@ -1,7 +1,7 @@
 import Axios, { AxiosRequestConfig } from 'axios'
 
 export default class RequestWrapper {
-    private static readonly BASE_URL = '/api';
+    private static readonly BASE_URL = 'http://localhost:8080';
 
     private static config: AxiosRequestConfig = {
         validateStatus: (status: number) => {
