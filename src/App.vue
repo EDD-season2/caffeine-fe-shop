@@ -21,6 +21,9 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
+import firebase from 'firebase/app'
+import 'firebase/messaging'
+
 import RequestWrapper from './lib/RequestWrapper'
 import Shop from './model/Shop'
 import { State } from './store'
@@ -45,16 +48,9 @@ export default class App extends Vue {
     }
 
     private subscribe () {
-        if (this.canSubscribe()) {
-            this.eventSource = RequestWrapper.subscribe(`/v1/subscribe/shops/${this.$store.state.currentShop.id}`)
-            this.eventSource.onmessage = (evt) => {
-                this.handleNotify(evt.data)
-                this.$store.dispatch('refreshPending')
-            }
-            this.eventSource.onerror = () => {
-                this.subscribe()
-            }
-        }
+        firebase.messaging().onMessage(payload => {
+            this.$store.dispatch('receiveNotification', payload.data.message)
+        })
     }
 
     private handleNotify (message: string) {
