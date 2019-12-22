@@ -32,6 +32,8 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
+import firebase from 'firebase/app'
+
 import Logo from '@/components/Logo.vue'
 import Subtitle from '@/components/Subtitle.vue'
 import OrderList from '@/components/OrderList.vue'
@@ -43,6 +45,8 @@ import Order from '../model/Order'
 import { OrderApiFactory } from '../lib/OrderApi'
 import OrderItem from '../model/OrderItem'
 import LoginNeededView from './LoginNeededView'
+import { NotificationApiFactory } from '../lib/NotificationApi'
+import Owner from '../model/Owner'
 
 @Component({
     components: {

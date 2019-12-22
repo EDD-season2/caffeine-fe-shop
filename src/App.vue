@@ -28,6 +28,7 @@ import RequestWrapper from './lib/RequestWrapper'
 import Shop from './model/Shop'
 import { State } from './store'
 import Owner from './model/Owner'
+import { NotificationApiFactory } from './lib/NotificationApi'
 
 @Component
 export default class App extends Vue {
@@ -44,10 +45,33 @@ export default class App extends Vue {
                 this.snackbarText = state.notifications[state.notifications.length - 1]
             }
         })
-        this.subscribe()
+        if (this.$store.state.currentShop !== Shop.UNAUTHENTICATED) {
+            this.subscribe()
+        }
     }
 
     private subscribe () {
+        const messaging = firebase.messaging()
+        Notification.requestPermission()
+            .then((permission: string) => {
+                if (permission !== 'granted') {
+                alert('알림을 허용해주세요')
+                return ''
+                }
+                return messaging.getToken()
+            })
+            .then((token: string) => {
+                if (token.length === 0) {
+                    return
+                }
+                NotificationApiFactory.create().updateToken(this.$store.state.currentShop.id, token)
+                messaging.onTokenRefresh(() => {
+                messaging.getToken()
+                    .then((token: string) => {
+                    NotificationApiFactory.create().updateToken(this.$store.state.currenShop.id, token)
+                    })
+                })
+            })
         firebase.messaging().onMessage(payload => {
             this.$store.dispatch('receiveNotification', payload.data.message)
         })

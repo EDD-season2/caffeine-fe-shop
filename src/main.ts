@@ -17,27 +17,11 @@ const firebaseConfig = {
   messagingSenderId: '92007077963',
   appId: '1:92007077963:web:495e3cd4ab6e927e4455ce'
 }
-
 firebase.initializeApp(firebaseConfig)
 
 const messaging = firebase.messaging()
 
 messaging.usePublicVapidKey('BM1MU-VZ4F2iFFsMoxHKfxm35FTOFVWLSTUTJXtZ4Z-17m66Cdcwsn6jJ7sknIYeQS-OLMCavC_AJUjVMKpFLMw')
-Notification.requestPermission()
-.then((permission) => {
-  console.log('permission ', permission)
-  if (permission !== 'granted') {
-    alert('알림을 허용해주세요')
-  }
-})
-
-messaging.getToken()
-.then(t => console.log(t))
-
-messaging.onMessage((payload) => {
-  console.log(payload)
-  alert(payload)
-})
 
 Vue.config.productionTip = false
 
