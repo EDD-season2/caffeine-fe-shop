@@ -61,7 +61,8 @@ export default class Home extends LoginNeededView {
     private shopApi = new ShopApiFactory().create();
 
     private async created () {
-        this.ensureSignedIn()
+        await this.ensureSignedIn()
+        this.onTabSwitch(0)
     }
 
     private onTabSwitch (idx: number) {
