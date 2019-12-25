@@ -1,6 +1,12 @@
-FROM nginx
+# ref. https://cli.vuejs.org/guide/deployment.html#docker-nginx
+FROM node:latest as build-stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY ./ .
+RUN npm run build
 
-RUN ls -al
-WORKDIR /usr/src/app/public 
-
-COPY . /usr/src/app/public
+FROM nginx as production-stage
+RUN mkdir /app
+COPY --from=build-stage /app/dist /app
+COPY nginx.conf /etc/nginx/nginx.conf
