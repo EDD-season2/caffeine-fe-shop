@@ -43,6 +43,7 @@ export default class App extends Vue {
             if (mutation.type === 'addNotification') {
                 this.showSnackbar = true
                 this.snackbarText = state.notifications[state.notifications.length - 1]
+                this.$store.dispatch('refreshPending')
             }
         })
         if (this.$store.state.currentShop !== Shop.UNAUTHENTICATED) {
